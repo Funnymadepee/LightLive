@@ -1,0 +1,30 @@
+ext{
+    configs = [
+            compileSdk : 32,
+            minSdk : 23,
+            targetSdk : 32,
+            versionCode : 1,
+            versionName : "1.0",
+
+            // Android Architecture Components (LifeCycle, LiveData,  ViewModel, Room)
+            architectureComponentsVersion: "1.1.1",
+
+            // open source control
+            androidSupportVersion : '1.0.2',
+            okhttp : '4.2.1',
+            glide : '4.9.0',
+            retrofit : '2.6.0',
+            fastjson : '1.2.62',
+            butterknife : '10.2.1',
+            lombok : '1.18.16',
+            rxjava : "2.2.0",
+            rxandroid : "2.0.2",
+
+            // view component
+            dialog  : '3.1.6',
+
+            exoplayer : '2.18.1',
+            websocket : '1.5.1'
+
+    ]
+}

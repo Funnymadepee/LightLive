@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ll_badge"
+    android:layout_width="45dp"
+    android:layout_height="20dp"
+    android:gravity="center_vertical"
+    android:visibility="visible">
+
+    <TextView
+        android:id="@+id/tv_level_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="15dp"
+        android:background="@drawable/shape_douyu_level_left"
+        android:paddingStart="4dp"
+        android:paddingEnd="2dp"
+        android:gravity="center"
+        android:text="LV "
+        android:textColor="#515151"
+        android:textSize="10sp"
+        tools:ignore="SmallSp"/>
+
+    <TextView
+        android:id="@+id/tv_level"
+        android:text="555"
+        android:paddingStart="2dp"
+        android:paddingEnd="4dp"
+        android:gravity="center_vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="15dp"
+        android:background="@drawable/shape_douyu_level_right"
+        android:textColor="@color/textColor"
+        android:textSize="10sp"
+        tools:ignore="SmallSp" />
+</LinearLayout>
