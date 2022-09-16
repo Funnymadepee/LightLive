@@ -23,7 +23,7 @@
  *  OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.lzm.lightLive.http.dy;
+package com.lzm.lightLive.http.request.dy;
 
 import org.java_websocket.WebSocketImpl;
 import org.java_websocket.drafts.Draft;

@@ -4,8 +4,10 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
+import com.lzm.lightLive.R;
+import com.lzm.lightLive.http.bean.Room;
+
 import java.math.BigInteger;
-import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.text.DecimalFormat;
 import java.util.Locale;
@@ -42,7 +44,7 @@ public class CommonUtil {
         return timeStr;
     }
 
-    public static String convertInt2K(Integer num) {
+    public static String convertInt2K(long num) {
         if (num < 10000) {
             return String.valueOf(num);
         }
@@ -92,4 +94,38 @@ public class CommonUtil {
         }
     }
 
+    public static int generateLiveStatus(String status) {
+        int liveStatus;
+        switch (status) {
+            case "ON":
+                liveStatus = Room.LIVE_STATUS_ON;
+                break;
+            case "REPLAY":
+                liveStatus = Room.LIVE_STATUS_PLAY_BACK;
+                break;
+            default:
+                liveStatus = Room.LIVE_STATUS_OFF;
+                break;
+        }
+        return liveStatus;
+    }
+
+    public static int generatePlatformDrawable(int platform) {
+        int drawableRes;
+        switch (platform) {
+            case Room.LIVE_PLAT_DY:
+                drawableRes = R.drawable.ic_plat_dy;
+                break;
+            case Room.LIVE_PLAT_HY:
+                drawableRes = R.drawable.ic_plat_hy;
+                break;
+            case Room.LIVE_PLAT_BL:
+                drawableRes = R.drawable.ic_plat_bilibili;
+                break;
+            default:
+                drawableRes = R.drawable.ic_live;
+                break;
+        }
+        return drawableRes;
+    }
 }

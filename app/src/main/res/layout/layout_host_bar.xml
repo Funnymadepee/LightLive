@@ -52,7 +52,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
-            android:text="@{viewModel.room.ownerName}"
+            android:text="@{viewModel.mRoom.hostName}"
             android:textColor="@color/white"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -62,7 +62,7 @@
             android:id="@+id/tv_room_num"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{viewModel.room.roomId}"
+            android:text="@{viewModel.mRoom.roomId}"
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/tv_room_owner"
@@ -73,7 +73,7 @@
 
         <ImageView
             android:id="@+id/iv_avatar"
-            imageUrl="@{viewModel.room.avatar}"
+            imageUrl="@{viewModel.mRoom.hostAvatar}"
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:layout_alignParentEnd="true"

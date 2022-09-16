@@ -3,14 +3,11 @@ package com.lzm.lightLive.model;
 import android.util.Log;
 import androidx.lifecycle.ViewModel;
 
-import com.lzm.lightLive.bean.douyu.DyStream;
+import com.lzm.lightLive.http.bean.dy.DyStream;
 import com.lzm.lightLive.http.BaseResult;
 import com.lzm.lightLive.http.RetrofitManager;
-import com.lzm.lightLive.http.dy.DyStreamHttpRequest;
+import com.lzm.lightLive.http.request.dy.DyStreamHttpRequest;
 import com.lzm.lightLive.util.CommonUtil;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;

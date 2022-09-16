@@ -55,7 +55,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="8dp"
-                    android:text="@{viewModel.room.ownerName}"
+                    android:text="@{viewModel.mRoom.hostName}"
                     android:textColor="@color/white"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -65,7 +65,7 @@
                     android:id="@+id/tv_room_num"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{viewModel.room.roomId}"
+                    android:text="@{viewModel.mRoom.roomId}"
                     android:textColor="@color/white"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="@+id/tv_room_owner"
@@ -76,7 +76,7 @@
 
                 <com.lzm.lightLive.view.RoundImageView
                     android:id="@+id/iv_avatar"
-                    imageUrl="@{viewModel.room.avatar}"
+                    imageUrl="@{viewModel.mRoom.hostAvatar}"
                     app:corner_radius="15dp"
                     android:layout_width="45dp"
                     android:layout_height="45dp"
@@ -152,7 +152,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/white_50"
                 android:layout_gravity="center|center_vertical"
-                android:text="@{viewModel.room.roomName}"
+                android:text="@{viewModel.mRoom.roomName}"
                 tools:text="测试标题"/>
 
         </FrameLayout>

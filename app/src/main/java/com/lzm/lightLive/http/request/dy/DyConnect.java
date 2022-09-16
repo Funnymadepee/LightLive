@@ -1,6 +1,7 @@
-package com.lzm.lightLive.http.dy;
+package com.lzm.lightLive.http.request.dy;
 
 import com.lzm.lightLive.common.Const;
+import com.lzm.lightLive.http.bean.Room;
 import com.lzm.lightLive.util.DanMuParserDY;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.exceptions.WebsocketNotConnectedException;
@@ -15,11 +16,11 @@ import java.nio.charset.StandardCharsets;
 
 public class DyConnect {
 
-    private final String roomId;
+    private final Room room;
     private final MessageReceiveListener receiveListener;
 
-    public DyConnect(String roomId, MessageReceiveListener receiver) {
-        this.roomId = roomId;
+    public DyConnect(Room room, MessageReceiveListener receiver) {
+        this.room = room;
         this.receiveListener = receiver;
     }
 
@@ -36,7 +37,7 @@ public class DyConnect {
                 while (true) {
                     try {
                         send(request.heartBeat());
-                        Thread.sleep(45000);
+                        Thread.sleep(30000);        //心跳 斗鱼-45秒 虎牙-30秒
                     } catch (IOException | InterruptedException | WebsocketNotConnectedException e) {
                         e.printStackTrace();
                     }
@@ -45,9 +46,9 @@ public class DyConnect {
             @Override
             public void onOpen(ServerHandshake serverHandshake) {
                 try {
-                    send(request.login(roomId));//发送登录请求
-                    send(request.joinGroup(roomId));//发送加入群组请求
-                    send(request.heartBeat());//发送心跳
+                    send(request.login(room.getRoomId()));      //发送登录请求
+                    send(request.joinGroup(room.getRoomId()));  //发送加入群组请求
+                    send(request.heartBeat());                  //发送心跳
                     heartBeatThread.start();
                 } catch (IOException e) {
                     e.printStackTrace();

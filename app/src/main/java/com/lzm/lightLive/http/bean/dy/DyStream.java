@@ -1,4 +1,4 @@
-package com.lzm.lightLive.bean.douyu;
+package com.lzm.lightLive.http.bean.dy;
 
 import com.google.gson.annotations.SerializedName;
 

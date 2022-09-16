@@ -2,7 +2,7 @@ package com.lzm.lightLive.util;
 
 import android.util.Log;
 
-import com.lzm.lightLive.http.dy.DyConnect;
+import com.lzm.lightLive.http.request.dy.DyConnect;
 
 public class DanMuParserDY {
 
@@ -29,7 +29,7 @@ public class DanMuParserDY {
             DyConnect.DouYuDanMu dyDanMu = new DyConnect.DouYuDanMu("chatmsg", Long.parseLong(uid),
                     nickName, content, level, avatar, badge, Integer.parseInt(badgeLevel));
 
-            //TODO 根据uid / nickName 查找黑名单
+            //TODO 根据uid / nickName 查找黑名单 / vip重点关注用户
             if (nickName.equals("realzmzzZ")) {
                 Log.e("TAG", "parse: " + dyDanMu.getUid() );
                 dyDanMu.setVip(true);

@@ -63,4 +63,5 @@ dependencies {
     implementation "com.google.android.exoplayer:exoplayer-ui:${configs.exoplayer}"
     implementation "com.google.android.exoplayer:exoplayer:${configs.exoplayer}"
 
+    implementation "com.github.kongzue.DialogX:DialogX:${configs.dialogx_version}"
 }

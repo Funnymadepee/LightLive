@@ -8,12 +8,12 @@
     android:layout_margin="8dp"
     android:elevation="2dp"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="100dp">
 
 
     <ImageView
         android:id="@+id/iv_thumb"
-        tools:layout_height="300dp"
+        tools:layout_height="160dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
@@ -29,15 +29,15 @@
             android:gravity="center"
             android:layout_gravity="start"
             android:text="直播状态"
-            android:layout_marginStart="5dp"
-            android:textSize="10sp"
-            android:padding="4dp"
+            android:layout_marginStart="4dp"
+            android:textSize="6sp"
+            android:padding="2dp"
             android:textColor="@color/white"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="14dp"
             android:background="@drawable/shape_live_status"
             tools:ignore="SmallSp"
-            android:drawablePadding="4dp"
+            android:drawablePadding="2dp"
             app:drawableStartCompat="@drawable/ic_live" />
 
         <TextView
@@ -45,31 +45,32 @@
             android:text="2.5k"
             android:gravity="center"
             android:visibility="visible"
-            android:layout_marginStart="5dp"
-            android:textSize="10sp"
-            android:padding="4dp"
+            android:layout_marginStart="4dp"
+            android:textSize="6sp"
+            android:padding="2dp"
             android:background="@drawable/shape_live_heat"
             android:textColor="@color/white"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="14dp"
             tools:ignore="SmallSp"
-            android:drawablePadding="4dp"
+            android:drawablePadding="2dp"
             app:drawableStartCompat="@drawable/ic_heat" />
 
         <LinearLayout
-            android:layout_marginStart="5dp"
+            android:layout_marginStart="4dp"
             android:gravity="center"
             android:layout_gravity="end"
             android:background="@drawable/shape_live_cate"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="14dp">
 
             <ImageView
+                android:id="@+id/iv_plat"
                 android:paddingStart="4dp"
                 android:paddingEnd="0dp"
                 android:layout_gravity="center"
-                android:layout_width="26.84dp"
-                android:layout_height="10.24dp"
+                android:layout_width="13.42dp"
+                android:layout_height="5.12dp"
                 android:src="@drawable/ic_plat_dy" />
 
             <TextView
@@ -77,8 +78,8 @@
                 android:text="热门游戏"
                 android:gravity="center"
                 android:textAlignment="center"
-                android:textSize="10sp"
-                android:padding="4dp"
+                android:textSize="6sp"
+                android:padding="2dp"
                 android:textColor="@color/white"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -102,27 +103,27 @@
             app:corner_radius="15dp"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
-            android:layout_width="46dp"
-            android:layout_height="46dp"/>
+            android:layout_width="23dp"
+            android:layout_height="23dp"/>
 
         <TextView
             android:id="@+id/tv_host_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
+            android:layout_marginStart="4dp"
             android:layout_toEndOf="@id/iv_avatar"
             android:gravity="center"
             android:text="主播名称"
             android:textStyle="bold"
             android:textColor="@color/white"
-            android:textSize="18sp" />
+            android:textSize="12sp" />
 
         <TextView
             android:id="@+id/tv_room_name"
             android:gravity="center"
             android:text="房间名"
-            android:textSize="12sp"
-            android:layout_marginTop="5dp"
+            android:textSize="8sp"
+            android:layout_marginTop="4dp"
             android:layout_alignStart="@id/tv_host_name"
             android:layout_toEndOf="@+id/iv_avatar"
             android:layout_below="@id/tv_host_name"
@@ -137,10 +138,10 @@
             android:layout_alignParentEnd="true"
             android:layout_alignBottom="@id/tv_room_name"
             android:gravity="center"
-            android:textSize="12sp"
+            android:textSize="8sp"
             android:text="房间号"
             android:drawableStart="@drawable/ic_home"
-            android:drawablePadding="5dp"
+            android:drawablePadding="4dp"
             android:textColor="@color/white"/>
 
     </RelativeLayout>

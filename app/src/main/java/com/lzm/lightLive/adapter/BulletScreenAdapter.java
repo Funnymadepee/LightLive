@@ -19,11 +19,11 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.lzm.lightLive.R;
-import com.lzm.lightLive.http.dy.DyConnect;
+import com.lzm.lightLive.http.request.dy.DyConnect;
 
 import java.util.List;
 
-public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
+public class BulletScreenAdapter extends RecyclerView.Adapter<BulletScreenAdapter.ViewHolder> {
 
     private static final String TAG = "MyAdapter";
 
@@ -32,7 +32,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     Animation scaleAni = new ScaleAnimation(0.5f, 1.0f, 1.0f, 1.0f);
 
 
-    public MyAdapter(List<DyConnect.DouYuDanMu> dataList) {
+    public BulletScreenAdapter(List<DyConnect.DouYuDanMu> dataList) {
         this.dataList = dataList;
     }
 

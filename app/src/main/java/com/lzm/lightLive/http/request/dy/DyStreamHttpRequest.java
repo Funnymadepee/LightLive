@@ -1,9 +1,8 @@
-package com.lzm.lightLive.http.dy;
+package com.lzm.lightLive.http.request.dy;
 
-import com.lzm.lightLive.bean.douyu.DyStream;
+import com.lzm.lightLive.http.bean.dy.DyStream;
 import com.lzm.lightLive.http.BaseResult;
 import io.reactivex.Observable;
-import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.Path;

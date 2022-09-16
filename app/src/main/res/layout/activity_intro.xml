@@ -9,38 +9,6 @@
         android:layout_height="match_parent"
         tools:context=".act.IntroActivity">
 
-        <!--<com.google.android.material.appbar.AppBarLayout
-            android:background="@color/tool_bar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <com.google.android.material.appbar.CollapsingToolbarLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                >
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    app:layout_collapseMode="pin">
-                    <ImageView
-                        android:id="@+id/iv_user"
-                        android:layout_alignParentStart="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginStart="10dp"
-                        android:src="@drawable/ic_user"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
-                    <ImageView
-                        android:id="@+id/iv_search"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginEnd="10dp"
-                        android:src="@drawable/ic_search"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
-                </RelativeLayout>
-            </com.google.android.material.appbar.CollapsingToolbarLayout>
-        </com.google.android.material.appbar.AppBarLayout>-->
-
         <FrameLayout
             android:id="@+id/content"
             android:layout_width="match_parent"
@@ -58,18 +26,18 @@
             app:layout_behavior="com.lzm.lib_base.behavior.BottomNavBarBehavior"
             android:id="@+id/bottomNavigation"
             android:layout_width="match_parent"
-            android:layout_height="80dp"
+            android:layout_height="60dp"
             android:layout_gravity="bottom"
             android:background="@drawable/shape_zml_transparent"
             android:layout_alignParentBottom="true" />
 
-<!--        <com.lzm.lib_base.view.RealtimeBlurView-->
-<!--            app:layout_behavior="com.lzm.lib_base.behavior.BottomNavBarBehavior"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="80dp"-->
-<!--            android:layout_gravity="bottom"-->
-<!--            app:realtimeBlurRadius="10dp"-->
-<!--            app:realtimeOverlayColor="#4D000000" />-->
+        <com.lzm.lib_base.view.RealtimeBlurView
+            app:layout_behavior="com.lzm.lib_base.behavior.BottomNavBarBehavior"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_gravity="bottom"
+            app:realtimeBlurRadius="10dp"
+            app:realtimeOverlayColor="#4D000000" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>
