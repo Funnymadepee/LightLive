@@ -58,6 +58,7 @@ public class SubscribeFragment extends BaseFreshFragment<Room> {
     @Override
     public void onRefresh() {
 //        super.onRefresh();
+        //todo grab form database
         requestSubHostInfo(Const.getSubscribeHost());
     }
 

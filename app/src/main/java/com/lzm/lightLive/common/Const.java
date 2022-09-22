@@ -29,6 +29,7 @@ public class Const {
     public static final Room pair_aluka = new Room("364167", Room.LIVE_PLAT_HY);
     public static final Room pair_longz = new Room("791102", Room.LIVE_PLAT_HY);
     public static final Room pair_ns12 = new Room("791112", Room.LIVE_PLAT_HY);
+    public static final Room pair_998 = new Room("998", Room.LIVE_PLAT_HY);
 
     public static final String WEB_SOCKET_DY = "wss://danmuproxy.douyu.com:8506/";
 
@@ -56,6 +57,7 @@ public class Const {
         hosts.add(pair_aluka);
         hosts.add(pair_longz);
         hosts.add(pair_ns12);
+        hosts.add(pair_998);
         return hosts;
     }
 

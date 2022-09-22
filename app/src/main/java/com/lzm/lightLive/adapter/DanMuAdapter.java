@@ -5,6 +5,7 @@ import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import androidx.annotation.NonNull;
@@ -14,10 +15,12 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.lzm.lib_base.util.FasterLinearSmoothScroller;
 import com.lzm.lightLive.R;
-import com.lzm.lightLive.http.request.dy.DyDanMuConnect;
+import com.lzm.lightLive.http.danmu.basic.DanMu;
+import com.lzm.lightLive.http.danmu.basic.DanMuMessageType;
 import com.lzm.lightLive.util.AnimUtil;
+import com.lzm.lightLive.util.UiTools;
 
-public class DanMuAdapter extends BaseQuickAdapter<DyDanMuConnect.DouYuDanMu, BaseViewHolder>
+public class DanMuAdapter extends BaseQuickAdapter<DanMu, BaseViewHolder>
         implements ScrollEvent {
 
     private static final String TAG = "DanMuAdapter";
@@ -50,7 +53,7 @@ public class DanMuAdapter extends BaseQuickAdapter<DyDanMuConnect.DouYuDanMu, Ba
     }
 
     @Override
-    public void addData(@NonNull DyDanMuConnect.DouYuDanMu data) {
+    public void addData(@NonNull DanMu data) {
         super.addData(data);
         if(!isFooterViewShow()) {
             mRecyclerView.smoothScrollToPosition(getItemCount() - 1);
@@ -58,30 +61,43 @@ public class DanMuAdapter extends BaseQuickAdapter<DyDanMuConnect.DouYuDanMu, Ba
     }
 
     @Override
-    protected void convert(BaseViewHolder holder, DyDanMuConnect.DouYuDanMu item) {
-        SpannableString string = new SpannableString(item.getNn() + " : " + item.getTxt());
+    protected void convert(BaseViewHolder holder, DanMu item) {
+        if (null == item) return;
+        if (null == item.getUserIfo()) return;
+        if (null == item.getDanMuFormatData()) return;
+
+        String nickName = item.getUserIfo().getNickName();
+        String badge = item.getUserIfo().getBadge();
+        String badgeLevel = item.getUserIfo().getBadgeLevel();
+        int level = item.getUserIfo().getLevel();
+        boolean isBlackList = item.getUserIfo().isBlackList();
+        boolean isVip = item.getUserIfo().isVip();
+
+        int fontColor = item.getDanMuFormatData().getFontColor();
+
+        SpannableString string = new SpannableString(nickName + " : " + item.getContent());
         string.setSpan(new ForegroundColorSpan(Color.parseColor("#03A9F4")),
-                0, item.getNn().length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+                0, nickName.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
         string.setSpan(new ForegroundColorSpan(Color.parseColor("#03A9F4")),
-                item.getNn().length(), item.getNn().length() + 3, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-        string.setSpan(new ForegroundColorSpan(Color.LTGRAY),
-                item.getNn().length() + 3, string.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+                nickName.length(), nickName.length() + 3, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+        string.setSpan(new ForegroundColorSpan(fontColor),
+                nickName.length() + 3, string.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
         holder.setText(R.id.tv_content, string);
-        if(!TextUtils.isEmpty(item.getBnn())) {
-            holder.setText(R.id.tv_badge, item.getBnn())
-                    .setText(R.id.tv_badge_level,String.valueOf(item.getBl()))
+        if(!TextUtils.isEmpty(badge)) {
+            holder.setText(R.id.tv_badge, badge)
+                    .setText(R.id.tv_badge_level,String.valueOf(badgeLevel))
                     .setVisible(R.id.layout_badge, true);
         }
-        if(item.getLevel() > 0) {
-            holder.setText(R.id.tv_level, String.valueOf(item.getLevel()))
+        if(level > 0) {
+            holder.setText(R.id.tv_level, String.valueOf(level))
                     .getView(R.id.layout_level).setVisibility(View.VISIBLE);
         }else {
             holder.getView(R.id.layout_level).setVisibility(View.GONE);
         }
-        holder.getView(R.id.ll_normal).setVisibility(item.isBlackVip() ? View.GONE : View.VISIBLE);
-        holder.getView(R.id.ll_black_vip).setVisibility(item.isBlackVip() ? View.VISIBLE : View.GONE);
+        holder.getView(R.id.ll_normal).setVisibility(item.getUserIfo().isBlackList() ? View.GONE : View.VISIBLE);
+        holder.getView(R.id.ll_black_vip).setVisibility(isBlackList ? View.VISIBLE : View.GONE);
 
-        if(item.isVip()) {
+        if(isVip) {
             holder.getView(R.id.fl_item_root).startAnimation(AnimationUtils.loadAnimation(holder.itemView.getContext(), R.anim.item_anim_vip));
             holder.getView(R.id.fl_item_root).setBackground(holder.itemView.getContext().getDrawable(R.drawable.shape_douyu_vip));
         }else {

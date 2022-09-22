@@ -28,15 +28,16 @@ import com.lzm.lightLive.R;
 import com.lzm.lightLive.adapter.DanMuAdapter;
 import com.lzm.lightLive.http.bean.Room;
 import com.lzm.lightLive.databinding.ActivityMainBinding;
-import com.lzm.lightLive.http.request.dy.DyDanMuConnect;
+import com.lzm.lightLive.http.danmu.basic.DanMu;
+import com.lzm.lightLive.http.danmu.basic.DanMuServiceConnector;
+import com.lzm.lightLive.http.danmu.dy.DyDanMuConnector;
+import com.lzm.lightLive.http.danmu.basic.WebSocketListener;
+import com.lzm.lightLive.http.danmu.hy.HyDanMuConnector;
 import com.lzm.lightLive.model.RoomViewModel;
 import com.lzm.lightLive.util.CommonUtil;
 import com.lzm.lightLive.util.DialogUtil;
 import com.lzm.lightLive.util.UiTools;
 import com.lzm.lightLive.video.VideoListener;
-import com.lzm.lightLive.view.BasicDanMuModel;
-
-import org.java_websocket.client.WebSocketClient;
 
 public class MainActivity extends BaseBindingActivity<ActivityMainBinding, RoomViewModel> implements Player.Listener {
 
@@ -44,7 +45,8 @@ public class MainActivity extends BaseBindingActivity<ActivityMainBinding, RoomV
 
     private Room roomInfo;
 
-    private WebSocketClient danMuWebSocketClient;
+    private DanMuServiceConnector mDanMuConnector;
+
     private ExoPlayer player;
 
     boolean mExoPlayerFullscreen;
@@ -81,7 +83,7 @@ public class MainActivity extends BaseBindingActivity<ActivityMainBinding, RoomV
         initViewModel();
         initWindow();
         initView();
-        initDanmu();
+        initDanMu();
         initViewClickListener();
         initWebSocket();
         initFullScreenDialog();
@@ -116,7 +118,7 @@ public class MainActivity extends BaseBindingActivity<ActivityMainBinding, RoomV
         });
     }
 
-    private void initDanmu() {
+    private void initDanMu() {
         mBind.danmu.prepare();
     }
 
@@ -179,23 +181,22 @@ public class MainActivity extends BaseBindingActivity<ActivityMainBinding, RoomV
     }
 
     private void initWebSocket() {
-        DyDanMuConnect dyConnect = new DyDanMuConnect(roomInfo, new DyDanMuConnect.MessageReceiveListener() {
+        WebSocketListener socketListener = new WebSocketListener() {
             @Override
-            public void onReceiver(DyDanMuConnect.DouYuDanMu douYuDanMu) {
-                if(null != douYuDanMu) {
-                    BasicDanMuModel danMuView = new BasicDanMuModel(MainActivity.this, douYuDanMu.getTxt());
-                    mBind.danmu.add(danMuView);
-                    runOnUiThread(() -> {
-                        mDanMuAdapter.addData(douYuDanMu);
-                    });
-                }
+            public void onMessage(DanMu danMu) {
+                super.onMessage(danMu);
+                runOnUiThread(() -> {
+                    mDanMuAdapter.addData(danMu);
+                });
             }
-        });
-        try {
-            danMuWebSocketClient = dyConnect.createConnect();
-            danMuWebSocketClient.connectBlocking();
-        }catch (Exception e) {
-            Log.e(TAG, "initWebSocket: " + e.getMessage() );
+        };
+        switch (roomInfo.getPlatform()) {
+            case Room.LIVE_PLAT_DY:
+                mDanMuConnector = new DyDanMuConnector(roomInfo, socketListener);
+                break;
+            case Room.LIVE_PLAT_HY:
+                mDanMuConnector = new HyDanMuConnector(roomInfo,socketListener);
+                break;
         }
     }
 
@@ -263,7 +264,7 @@ public class MainActivity extends BaseBindingActivity<ActivityMainBinding, RoomV
 
     @Override
     public void onBackPressed() {
-        danMuWebSocketClient.close();
+        mDanMuConnector.close();
         player.stop();
         super.onBackPressed();
     }

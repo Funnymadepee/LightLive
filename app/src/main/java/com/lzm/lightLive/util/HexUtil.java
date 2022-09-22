@@ -1,5 +1,7 @@
 package com.lzm.lightLive.util;
 
+import java.io.IOException;
+
 public class HexUtil {
 
     /**
@@ -28,24 +30,24 @@ public class HexUtil {
                 | ((src[3] & 0xFF) << 24));
     }
 
-    public static byte[] decodeHex(String data) throws Exception {
+    public static byte[] decodeHex(String data) throws IOException {
         return decodeHex(data.toCharArray());
     }
 
-    public static byte[] decodeHex(char[] data) throws Exception {
+    public static byte[] decodeHex(char[] data) throws IOException {
         byte[] out = new byte[data.length >> 1];
         decodeHex(data, out, 0);
         return out;
     }
 
-    public static int decodeHex(char[] data, byte[] out, int outOffset) throws Exception {
+    public static int decodeHex(char[] data, byte[] out, int outOffset) throws IOException {
         int len = data.length;
         if ((len & 1) != 0) {
-            throw new Exception("Odd number of characters.");
+            throw new IOException("Odd number of characters.");
         } else {
             int outLen = len >> 1;
             if (out.length - outOffset < outLen) {
-                throw new Exception("Output array is not large enough to accommodate decoded data.");
+                throw new IOException("Output array is not large enough to accommodate decoded data.");
             } else {
                 int i = outOffset;
 
@@ -62,10 +64,10 @@ public class HexUtil {
         }
     }
 
-    protected static int toDigit(char ch, int index) throws Exception {
+    protected static int toDigit(char ch, int index) throws IOException {
         int digit = Character.digit(ch, 16);
         if (digit == -1) {
-            throw new Exception("Illegal hexadecimal character " + ch + " at index " + index);
+            throw new IOException("Illegal hexadecimal character " + ch + " at index " + index);
         } else {
             return digit;
         }

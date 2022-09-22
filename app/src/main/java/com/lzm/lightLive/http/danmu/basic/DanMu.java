@@ -1,7 +1,6 @@
 package com.lzm.lightLive.http.danmu.basic;
 
 import com.lzm.lightLive.http.request.hy.DanMuFormat;
-import com.lzm.lightLive.http.request.hy.HyDanMuConnect;
 
 public class DanMu {
     /**
@@ -15,7 +14,17 @@ public class DanMu {
     /**发送时间(时间戳类型)*/
     private Long timestamp;
     /**消息类型(弹幕/礼物/其他)*/
-    private String msgType;
+    private DanMuMessageType msgType;
+
+    public DanMu() {}
+
+    public DanMu(DanMuUserInfo userIfo, String content, DanMuFormat danMuFormatData, Long timestamp, DanMuMessageType msgType) {
+        this.userIfo = userIfo;
+        this.content = content;
+        this.danMuFormatData = danMuFormatData;
+        this.timestamp = timestamp;
+        this.msgType = msgType;
+    }
 
     @Override
     public String toString() {
@@ -63,11 +72,11 @@ public class DanMu {
         this.timestamp = timestamp;
     }
 
-    public String getMsgType() {
+    public DanMuMessageType getMsgType() {
         return msgType;
     }
 
-    public void setMsgType(String msgType) {
+    public void setMsgType(DanMuMessageType msgType) {
         this.msgType = msgType;
     }
 }

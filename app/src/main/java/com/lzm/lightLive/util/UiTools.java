@@ -2,6 +2,7 @@ package com.lzm.lightLive.util;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Paint;
@@ -10,19 +11,13 @@ import android.text.Layout;
 import android.text.SpannableString;
 import android.text.StaticLayout;
 import android.text.TextPaint;
-import android.util.Log;
 import android.view.RoundedCorner;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.WindowInsets;
 import android.widget.TextView;
 
-import androidx.annotation.IntDef;
-
 import com.lzm.lightLive.R;
-
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
 
 public class UiTools {
 
@@ -151,5 +146,13 @@ public class UiTools {
         } else {
             activity.getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         }
+    }
+
+    public static int convertRGBA(int color) {
+        int alpha = color >>> 24;
+        int r = ( color & 0xff0000 ) >> 16;
+        int g = ( color & 0xff00 ) >> 8;
+        int b = color & 0xff;
+        return Color.argb(alpha, r, g, b);
     }
 }

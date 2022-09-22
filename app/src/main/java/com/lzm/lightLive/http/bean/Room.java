@@ -57,12 +57,7 @@ public class Room implements Parcelable {
     public static final Creator<Room> CREATOR = new Creator<Room>() {
         @Override
         public Room createFromParcel(Parcel in) {
-            return new Room(in) {
-                @Override
-                public int getPlatform() {
-                    return Room.LIVE_PLAT_UNDEFINED;
-                }
-            };
+            return new Room(in);
         }
 
         @Override

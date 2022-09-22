@@ -5,7 +5,6 @@ public class DanMuFormat {
      * 字体颜色
      */
     private int fontColor = 1;
-
     /**
      * 字体大小
      */
@@ -22,6 +21,17 @@ public class DanMuFormat {
      * 是否弹出弹幕
      */
     private int popupStyle = 0;
+
+    public DanMuFormat() {
+    }
+
+    public DanMuFormat(int fontColor, int fontSize, int textSpeed, int transitionType, int popupStyle) {
+        this.fontColor = fontColor;
+        this.fontSize = fontSize;
+        this.textSpeed = textSpeed;
+        this.transitionType = transitionType;
+        this.popupStyle = popupStyle;
+    }
 
     @Override
     public String toString() {

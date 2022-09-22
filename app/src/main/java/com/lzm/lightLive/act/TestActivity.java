@@ -1,15 +1,8 @@
 package com.lzm.lightLive.act;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
-
 import com.lzm.lightLive.R;
-import com.lzm.lightLive.http.RetrofitManager;
-import com.lzm.lightLive.http.request.hy.HyDanMuConnect;
-import com.lzm.lightLive.http.request.hy.HyHttpRequest;
-
-import java.util.regex.Pattern;
 
 public class TestActivity extends AppCompatActivity {
 
@@ -21,8 +14,8 @@ public class TestActivity extends AppCompatActivity {
         setContentView(R.layout.activity_test);
 
 //        HyHttpRequest mCall = RetrofitManager.getHyMpRetrofit().create(HyHttpRequest.class);
-        HyDanMuConnect danMuConnect = new HyDanMuConnect();
-        danMuConnect.getHtml();
+//        HyDanMuConnect danMuConnect = new HyDanMuConnect();
+//        danMuConnect.getHtml();
        /* mCall.getRoomInfo("791102")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
