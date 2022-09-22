@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="RealtimeBlurView">
+        <attr name="realtimeBlurRadius" format="dimension"/>
+        <attr name="realtimeDownSampleFactor" format="float"/>
+        <attr name="realtimeOverlayColor" format="color"/>
+    </declare-styleable>
+
+    <declare-styleable name="SimpleBehavior">
+        <attr format="reference" name="dependsOn"/>
+        <attr name="dependType">
+            <enum name="height" value="0"/>
+            <enum name="width" value="1"/>
+            <enum name="x" value="2"/>
+            <enum name="y" value="3"/>
+        </attr>
+        <attr format="dimension" name="dependTargetX"/>
+        <attr format="dimension" name="dependTargetY"/>
+        <attr format="dimension" name="dependTargetWidth"/>
+        <attr format="dimension" name="dependTargetHeight"/>
+        <attr format="dimension" name="targetX"/>
+        <attr format="dimension" name="targetY"/>
+        <attr format="dimension" name="targetWidth"/>
+        <attr format="dimension" name="targetHeight"/>
+        <attr format="color" name="targetBackgroundColor"/>
+        <attr format="float" name="targetAlpha"/>
+        <attr format="float" name="targetRotateX"/>
+        <attr format="float" name="targetRotateY"/>
+        <attr format="reference" name="animation"/>
+    </declare-styleable>
+</resources>

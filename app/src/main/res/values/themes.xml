@@ -1,5 +1,8 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.LightLive" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="Theme.LightLive" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <item name="basic_background">@color/light_basic_background</item>
+        <item name="basic_item_background">@color/light_basic_item_background</item>
+        <item name="basic_text_color">@color/light_basic_text_color</item>
     </style>
 </resources>

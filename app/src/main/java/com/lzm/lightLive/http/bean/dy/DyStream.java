@@ -1,7 +1,6 @@
 package com.lzm.lightLive.http.bean.dy;
 
 import com.google.gson.annotations.SerializedName;
-
 import java.util.Arrays;
 
 public class DyStream {

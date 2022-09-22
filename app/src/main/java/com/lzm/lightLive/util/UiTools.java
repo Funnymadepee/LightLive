@@ -33,9 +33,19 @@ public class UiTools {
         return (int) (px / scale + 0.5f);
     }
 
+    public static float pxToDp(Context context, float px) {
+        final float scale = context.getResources().getDisplayMetrics().density;
+        return (px / scale + 0.5f);
+    }
+
     public static int dp2px(Context context, float dp) {
         final float scale = context.getResources().getDisplayMetrics().density;
         return (int) (dp * scale + 0.5f);
+    }
+
+    public static float dpToPx(Context context, float dp) {
+        final float scale = context.getResources().getDisplayMetrics().density;
+        return (dp * scale + 0.5f);
     }
 
     /**
@@ -133,5 +143,13 @@ public class UiTools {
             }
         }
         return corners;
+    }
+
+    public static void setStatusBar(Activity activity, boolean isImmersive) {
+        if (isImmersive) {
+            activity.getWindow().getDecorView().setSystemUiVisibility(0);
+        } else {
+            activity.getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+        }
     }
 }

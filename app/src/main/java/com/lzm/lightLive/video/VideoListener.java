@@ -7,7 +7,6 @@ public class VideoListener implements Player.Listener {
 
     @Override
     public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
-//        Player.Listener.super.onPlayWhenReadyChanged(playWhenReady, playbackState);
         switch (playbackState) {
             case Player.STATE_IDLE: {
                 //播放器没有可播放的媒体。

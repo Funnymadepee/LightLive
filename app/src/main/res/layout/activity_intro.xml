@@ -1,43 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/dark"
         tools:context=".act.IntroActivity">
 
-        <FrameLayout
-            android:id="@+id/content"
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBarLayout"
+            android:elevation="0.1dp"
+            android:background="@color/dark"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="260dp">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_room"
+            <com.google.android.material.appbar.CollapsingToolbarLayout
+                app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
+                app:titleCollapseMode="scale"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/animationView"
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="50dp"
+                    android:layout_height="210dp"
+                    app:lottie_autoPlay="true"
+                    app:lottie_loop="true"/>
+
+            </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+            <View
+                android:id="@+id/anchor_view"
+                android:background="@color/white"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
 
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/content"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+
+        <FrameLayout
+            android:id="@+id/actionBar"
+            android:layout_width="match_parent"
+            android:layout_height="260dp">
+
+            <com.lzm.lib_base.view.RealtimeBlurView
+                android:id="@+id/actionBar_blur"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:realtimeBlurRadius="20dp"
+                app:realtimeOverlayColor="#B2070707"/>
+
+            <TextView
+                tools:text="推荐"
+                android:id="@+id/tv_title"
+                android:textSize="34sp"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:layout_marginStart="10dp"
+                android:layout_marginBottom="10.18dp"
+                android:layout_gravity="bottom"
+                android:gravity="center_vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
         </FrameLayout>
 
+        <com.lzm.lib_base.view.RealtimeBlurView
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_gravity="bottom"
+            android:visibility="visible"
+            app:realtimeBlurRadius="20dp"
+            app:layout_behavior="com.lzm.lib_base.behavior.BottomNavBarBehavior"
+            app:realtimeOverlayColor="#B2070707" />
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
-            app:layout_behavior="com.lzm.lib_base.behavior.BottomNavBarBehavior"
             android:id="@+id/bottomNavigation"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_gravity="bottom"
+            app:itemIconTint="#ffffff"
             android:background="@drawable/shape_zml_transparent"
-            android:layout_alignParentBottom="true" />
-
-        <com.lzm.lib_base.view.RealtimeBlurView
             app:layout_behavior="com.lzm.lib_base.behavior.BottomNavBarBehavior"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_gravity="bottom"
-            app:realtimeBlurRadius="10dp"
-            app:realtimeOverlayColor="#4D000000" />
+            android:visibility="visible"
+            android:elevation="0dp" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

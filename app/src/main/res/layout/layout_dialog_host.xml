@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/dark"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.lzm.lightLive.view.RoundImageView
+        android:id="@+id/iv_avatar"
+        android:src="@drawable/ic_menu_tag"
+        android:layout_width="142dp"
+        android:layout_height="142dp"
+        android:layout_marginTop="50dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_host_name"
+        tools:text="hostname"
+        android:drawablePadding="20dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintTop_toBottomOf="@id/iv_avatar"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:textStyle="bold"
+        android:textSize="24sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:drawableTint="@color/white"
+        android:textColor="@color/white"
+        app:drawableStartCompat="@drawable/ic_host" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_cate_name"
+        tools:text="cateName"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:drawablePadding="20dp"
+        app:drawableTint="@color/white"
+        android:textColor="@color/white"
+        app:drawableStartCompat="@drawable/ic_heat"
+        android:layout_marginTop="10dp"
+        app:layout_constraintTop_toBottomOf="@id/tv_host_name"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_room_id"
+        tools:text="roomid"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:drawablePadding="20dp"
+        app:drawableTint="@color/white"
+        android:textColor="@color/white"
+        app:drawableStartCompat="@drawable/ic_home"
+        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/tv_cate_name"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_room_name"
+        tools:text="roomname"
+        android:textSize="14sp"
+        android:drawablePadding="20dp"
+        app:drawableTint="@color/white"
+        android:textColor="@color/white"
+        app:drawableStartCompat="@drawable/ic_heat"
+        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/tv_room_id"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_room_url"
+        tools:text="roomUrl"
+        android:textSize="12sp"
+        android:drawablePadding="20dp"
+        app:drawableTint="@color/white"
+        android:textColor="@color/white"
+        app:drawableStartCompat="@drawable/ic_live"
+        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/tv_room_name"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_live_uri"
+        tools:text="liveUri"
+        android:textSize="12sp"
+        android:enabled="true"
+        android:textIsSelectable="true"
+        android:focusable="true"
+        android:longClickable="true"
+        android:drawablePadding="20dp"
+        app:drawableTint="@color/white"
+        android:textColor="@color/white"
+        app:drawableStartCompat="@drawable/ic_live"
+        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/tv_room_url"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"/>
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/animView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_live_uri"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

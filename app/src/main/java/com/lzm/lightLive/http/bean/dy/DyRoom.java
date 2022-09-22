@@ -8,61 +8,75 @@ import com.lzm.lightLive.http.bean.Room;
 public class DyRoom extends Room implements Parcelable {
 
     @SerializedName("cate_id")
-    private String dyCateId;          //分类Id
+    private String cateId;          //分类Id
     @SerializedName("start_time")
-    private String dyStartTime;       //开播时间
+    private String startTime;       //开播时间
     @SerializedName("online")
-    private long dyOnline;            //？
+    private long online;            //？
     @SerializedName("owner_weight")
-    private String dyOwnerWeight;     //？
+    private String ownerWeight;     //？
 
-    private String dyStreamUri;
+    private String streamUri;
+
+    public static final Creator<Room> CREATOR = new Creator<Room>() {
+        @Override
+        public Room createFromParcel(Parcel in) {
+            return new Room(in) {
+                @Override
+                public int getPlatform() {
+                    return Room.LIVE_PLAT_DY;
+                }
+            };
+        }
+
+        @Override
+        public Room[] newArray(int size) {
+            return new Room[size];
+        }
+    };
 
     protected DyRoom(Parcel in) {
         super(in);
     }
 
-    public String getDyCateId() {
-        return dyCateId;
+    public String getCateId() {
+        return cateId;
     }
 
-    public void setDyCateId(String dyCateId) {
-        this.dyCateId = dyCateId;
+    public void setCateId(String cateId) {
+        this.cateId = cateId;
     }
 
-    public String getDyStartTime() {
-        return dyStartTime;
+    public String getStartTime() {
+        return startTime;
     }
 
-    public void setDyStartTime(String dyStartTime) {
-        this.dyStartTime = dyStartTime;
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
     }
 
-
-    public long getDyOnline() {
-        return dyOnline;
+    public long getOnline() {
+        return online;
     }
 
-    public void setDyOnline(long dyOnline) {
-        this.dyOnline = dyOnline;
+    public void setOnline(long online) {
+        this.online = online;
     }
 
-
-    public String getDyOwnerWeight() {
-        return dyOwnerWeight;
+    public String getOwnerWeight() {
+        return ownerWeight;
     }
 
-    public void setDyOwnerWeight(String dyOwnerWeight) {
-        this.dyOwnerWeight = dyOwnerWeight;
+    public void setOwnerWeight(String ownerWeight) {
+        this.ownerWeight = ownerWeight;
     }
 
-    public String getDyStreamUri() {
-        return dyStreamUri;
+    public String getStreamUri() {
+        return streamUri;
     }
 
-    public void setDyStreamUri(String dyStreamUri) {
-        setLiveStreamUri(dyStreamUri);
-        this.dyStreamUri = dyStreamUri;
+    public void setStreamUri(String streamUri) {
+        this.streamUri = streamUri;
     }
 
     @Override
@@ -83,11 +97,11 @@ public class DyRoom extends Room implements Parcelable {
                 ", cateName='" + cateName + '\'' +
                 ", streamStatus=" + streamStatus +
                 ", liveStreamUri='" + liveStreamUri + '\'' +
-                ", dyCateId='" + dyCateId + '\'' +
-                ", dyStartTime='" + dyStartTime + '\'' +
-                ", dyOnline=" + dyOnline +
-                ", dyOwnerWeight='" + dyOwnerWeight + '\'' +
-                ", dyStreamUri='" + dyStreamUri + '\'' +
+                ", cateId='" + cateId + '\'' +
+                ", startTime='" + startTime + '\'' +
+                ", online=" + online +
+                ", ownerWeight='" + ownerWeight + '\'' +
+                ", streamUri='" + streamUri + '\'' +
                 '}';
     }
 }

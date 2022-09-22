@@ -3,10 +3,8 @@ package com.lzm.lightLive.util;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-
 import com.lzm.lightLive.R;
 import com.lzm.lightLive.http.bean.Room;
-
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.text.DecimalFormat;
@@ -31,7 +29,7 @@ public class CommonUtil {
         long minutes = time / 60 % 60;
         //秒
         long remainingSeconds = time % 60;
-        //判断时分秒是否小于10……
+        //判断时分秒是否小于10
         if (hour < 10) {
             timeStr = minutes + "分" + remainingSeconds + "秒";
         } else if (minutes < 10) {
@@ -101,7 +99,7 @@ public class CommonUtil {
                 liveStatus = Room.LIVE_STATUS_ON;
                 break;
             case "REPLAY":
-                liveStatus = Room.LIVE_STATUS_PLAY_BACK;
+                liveStatus = Room.LIVE_STATUS_REPLAY;
                 break;
             default:
                 liveStatus = Room.LIVE_STATUS_OFF;

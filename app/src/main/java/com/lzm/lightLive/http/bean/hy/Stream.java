@@ -8,6 +8,7 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 public class Stream implements Parcelable{
+
     @SerializedName("flv")
     private Flv flv;
 
@@ -41,7 +42,7 @@ public class Stream implements Parcelable{
         dest.writeParcelable(flv, flags);
     }
 
-    static class Flv implements Parcelable{
+    public static class Flv implements Parcelable{
 
         @SerializedName("multiLine")
         List<MultiLine> multiLine;
@@ -99,7 +100,7 @@ public class Stream implements Parcelable{
         }
     }
 
-    static class MultiLine implements Parcelable{
+    public static class MultiLine implements Parcelable{
         @SerializedName("url")
         String url;
         @SerializedName("cdnType")

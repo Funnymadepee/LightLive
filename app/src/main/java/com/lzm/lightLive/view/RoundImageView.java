@@ -16,7 +16,6 @@ import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.widget.ImageView;
-
 import com.lzm.lightLive.R;
 
 @SuppressLint("AppCompatCustomView")

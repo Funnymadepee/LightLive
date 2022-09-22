@@ -1,7 +1,6 @@
 package com.lzm.lightLive;
 
 import android.app.Application;
-
 import com.lzm.lightLive.util.SpUtils;
 
 public class App extends Application {

@@ -2,12 +2,9 @@ package com.lzm.lightLive.http;
 
 
 import androidx.annotation.Nullable;
-
 import com.bumptech.glide.load.HttpException;
 import com.google.gson.JsonParseException;
-
 import org.json.JSONException;
-
 import java.net.ConnectException;
 
 public class DataWrapper<T> {

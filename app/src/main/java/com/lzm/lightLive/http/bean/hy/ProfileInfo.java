@@ -2,7 +2,6 @@ package com.lzm.lightLive.http.bean.hy;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
 import com.google.gson.annotations.SerializedName;
 
 public class ProfileInfo implements Parcelable {
@@ -64,7 +63,9 @@ public class ProfileInfo implements Parcelable {
         dest.writeLong(profileRoom);
     }
 
-    public ProfileInfo(long uid, long yyid, String nick, String avatar, int activityId, int activityCount, String privateHost, long profileRoom) {
+    public ProfileInfo(long uid, long yyid, String nick,
+                       String avatar, int activityId, int activityCount,
+                       String privateHost, long profileRoom) {
         this.uid = uid;
         this.yyid = yyid;
         this.nick = nick;

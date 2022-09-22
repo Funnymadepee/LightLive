@@ -86,7 +86,12 @@ public class LiveData implements Parcelable {
         dest.writeInt(sex);
     }
 
-    public LiveData(long yyid, long channel, String profileHomeHost, int codecType, int isBluRay, int level, String bluRayMBitRate, String roomName, long profileRoom, long userCount, String screenshot, String gameFullName, String introduction, int sex) {
+    public LiveData(long yyid, long channel, String profileHomeHost,
+                    int codecType, int isBluRay, int level,
+                    String bluRayMBitRate, String roomName,
+                    long profileRoom, long userCount,
+                    String screenshot, String gameFullName,
+                    String introduction, int sex) {
         this.yyid = yyid;
         this.channel = channel;
         this.profileHomeHost = profileHomeHost;

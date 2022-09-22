@@ -5,7 +5,6 @@ import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.text.Layout;
 import android.util.AttributeSet;
-
 import androidx.appcompat.widget.AppCompatTextView;
 
 public class DrawableCenterTextView extends AppCompatTextView {

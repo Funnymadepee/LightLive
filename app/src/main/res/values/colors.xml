@@ -15,4 +15,12 @@
     <color name="goldText">#FFD700</color>
     <color name="tran">#00000000</color>
     <color name="main_theme">#1144aa</color>
+
+    <color name="light_basic_background">#EDEDED</color>
+    <color name="light_basic_item_background">#2196F3</color>
+    <color name="light_basic_text_color">#80FFFFFF</color>
+
+    <color name="dark_basic_background">#313131</color>
+    <color name="dark_basic_item_background">#575962</color>
+    <color name="dark_basic_text_color">#575962</color>
 </resources>

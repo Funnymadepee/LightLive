@@ -26,7 +26,8 @@ ext{
             exoplayer : '2.18.1',
             websocket : '1.5.1',
 
-            dialogx_version : '0.0.46.beta15'
+            dialogx_version : '0.0.46.beta15',
+            akdanmaku : '1.0.3'
 
     ]
 }

@@ -37,6 +37,23 @@ public class HyRoom extends Room implements Parcelable{
         return Room.LIVE_PLAT_HY;
     }
 
+    public static final Creator<Room> CREATOR = new Creator<Room>() {
+        @Override
+        public Room createFromParcel(Parcel in) {
+            return new Room(in) {
+                @Override
+                public int getPlatform() {
+                    return Room.LIVE_PLAT_HY;
+                }
+            };
+        }
+
+        @Override
+        public Room[] newArray(int size) {
+            return new Room[size];
+        }
+    };
+
     @Override
     public int describeContents() {
         return 0;

@@ -15,6 +15,11 @@ public class BaseResult<T> {
         this.data = data;
     }
 
+    public BaseResult(int code, String msg) {
+        this.errorCode = code;
+        this.errorMsg = msg;
+    }
+
     public int getErrorCode() {
         return errorCode;
     }

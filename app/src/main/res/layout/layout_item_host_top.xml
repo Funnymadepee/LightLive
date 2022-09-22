@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="4dp"
+    android:orientation="horizontal"
+    android:background="@drawable/shape_trans_up"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_room_status"
+        android:gravity="center"
+        android:layout_gravity="start"
+        android:text="直播状态"
+        android:textSize="6sp"
+        android:paddingEnd="4dp"
+        android:paddingStart="4dp"
+        android:textColor="@color/white"
+        android:layout_width="wrap_content"
+        android:layout_height="14dp"
+        android:background="@drawable/shape_live_status"
+        tools:ignore="SmallSp"
+        android:drawablePadding="2dp"
+        app:drawableStartCompat="@drawable/ic_live" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_live_heat"
+        android:text="2.5k"
+        android:gravity="center"
+        android:layout_marginStart="2dp"
+        android:textSize="6sp"
+        android:paddingEnd="4dp"
+        android:paddingStart="4dp"
+        android:background="@drawable/shape_live_heat"
+        android:textColor="@color/white"
+        android:layout_width="wrap_content"
+        android:layout_height="14dp"
+        tools:ignore="SmallSp"
+        android:drawablePadding="2dp"
+        app:drawableStartCompat="@drawable/ic_heat" />
+
+    <LinearLayout
+        android:layout_marginStart="2dp"
+        android:gravity="center"
+        android:layout_gravity="end"
+        android:background="@drawable/shape_live_cate"
+        android:layout_width="wrap_content"
+        android:layout_height="14dp">
+
+        <ImageView
+            android:id="@+id/iv_plat"
+            android:paddingStart="2dp"
+            android:paddingEnd="0dp"
+            android:layout_gravity="center"
+            android:layout_width="26.84dp"
+            android:layout_height="10.24dp"
+            android:src="@drawable/ic_plat_dy" />
+
+        <TextView
+            android:id="@+id/tv_live_cate"
+            android:text="热门游戏"
+            android:gravity="center"
+            android:textAlignment="center"
+            android:textSize="6sp"
+            android:paddingEnd="4dp"
+            android:paddingStart="2dp"
+            android:textColor="@color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:ignore="SmallSp" />
+
+    </LinearLayout>
+
+</LinearLayout>

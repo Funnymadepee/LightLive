@@ -27,6 +27,7 @@ public class BottomNavBarBehavior extends CoordinatorLayout.Behavior<View> {
     public void onNestedPreScroll(@NonNull CoordinatorLayout coordinatorLayout, @NonNull View child, @NonNull View target, int dx, int dy, @NonNull int[] consumed, int type) {
         super.onNestedPreScroll(coordinatorLayout, child, target, dx, dy, consumed, type);
         if (dy > 0) {// 上滑隐藏
+            //todo add setting
             if (outAnimator == null) {
                 outAnimator = ObjectAnimator.ofFloat(child, "translationY", 0, child.getHeight());
                 outAnimator.setDuration(400);

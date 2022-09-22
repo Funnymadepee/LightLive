@@ -12,38 +12,39 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.FrameLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 import androidx.annotation.NonNull;
-import androidx.databinding.Observable;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
+
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.MediaItem;
+import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.ui.StyledPlayerView;
 import com.google.android.material.transition.platform.MaterialContainerTransform;
 import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback;
 import com.lzm.lib_base.BaseBindingActivity;
 import com.lzm.lib_base.NotifyDialog;
 import com.lzm.lightLive.R;
-import com.lzm.lightLive.adapter.BulletScreenAdapter;
+import com.lzm.lightLive.adapter.DanMuAdapter;
 import com.lzm.lightLive.http.bean.Room;
 import com.lzm.lightLive.databinding.ActivityMainBinding;
-import com.lzm.lightLive.http.request.dy.DyConnect;
+import com.lzm.lightLive.http.request.dy.DyDanMuConnect;
 import com.lzm.lightLive.model.RoomViewModel;
 import com.lzm.lightLive.util.CommonUtil;
+import com.lzm.lightLive.util.DialogUtil;
+import com.lzm.lightLive.util.UiTools;
 import com.lzm.lightLive.video.VideoListener;
+import com.lzm.lightLive.view.BasicDanMuModel;
 
 import org.java_websocket.client.WebSocketClient;
-import java.util.ArrayList;
-import java.util.List;
 
-public class MainActivity extends BaseBindingActivity<ActivityMainBinding, RoomViewModel> {
+public class MainActivity extends BaseBindingActivity<ActivityMainBinding, RoomViewModel> implements Player.Listener {
 
     private static final String TAG = "MainActivity";
 
     private Room roomInfo;
 
-    private WebSocketClient connect;
+    private WebSocketClient danMuWebSocketClient;
     private ExoPlayer player;
 
     boolean mExoPlayerFullscreen;
@@ -52,8 +53,7 @@ public class MainActivity extends BaseBindingActivity<ActivityMainBinding, RoomV
     int mLastHeight;
     int lastOrientation;
 
-    private BulletScreenAdapter adapter;
-    private final List<DyConnect.DouYuDanMu> danmuList = new ArrayList<>();
+    private DanMuAdapter mDanMuAdapter;
 
     @Override
     protected int getLayoutResId() {
@@ -72,15 +72,17 @@ public class MainActivity extends BaseBindingActivity<ActivityMainBinding, RoomV
         setExitSharedElementCallback(new MaterialContainerTransformSharedElementCallback());
 
         super.onCreate(savedInstanceState);
+        UiTools.setStatusBar(this, false);
         Bundle bundle = getIntent().getBundleExtra("bundle");
         roomInfo = bundle.getParcelable("room_info");
-        Log.e(TAG, "bundleRoomInfo: " + roomInfo.toString() );
         if(null == roomInfo)
             return;
 //        startTransition();
         initViewModel();
         initWindow();
         initView();
+        initDanmu();
+        initViewClickListener();
         initWebSocket();
         initFullScreenDialog();
 
@@ -91,17 +93,13 @@ public class MainActivity extends BaseBindingActivity<ActivityMainBinding, RoomV
 
         playerView.setPlayer(player);
 
-        Log.e(TAG, "onCreate: " + roomInfo.getLiveStreamUri() );
         setStream(roomInfo.getLiveStreamUri());
-        playerView.setFullscreenButtonClickListener(isFullScreen -> {
-            System.err.println("全屏： " + isFullScreen);
-        });
+        playerView.setFullscreenButtonClickListener(isFullScreen -> System.err.println("全屏： " + isFullScreen));
         mBind.videoView.setControllerVisibilityListener((StyledPlayerView.ControllerVisibilityListener) visibility -> {
             mBind.llTitleBar.setVisibility(visibility);
         });
 
         mBind.videoView.setFullscreenButtonClickListener(isFullScreen -> {
-            Log.e(TAG, "onCreate: " + isFullScreen );
             if (isFullScreen) {
                 openFullScreenDialog();
             }
@@ -109,6 +107,17 @@ public class MainActivity extends BaseBindingActivity<ActivityMainBinding, RoomV
         mBind.tvDan.setOnClickListener(v -> {
             mBind.ryDm.setVisibility(mBind.ryDm.getVisibility() == View.GONE ? View.VISIBLE : View.GONE);
         });
+    }
+
+    private void initViewClickListener() {
+        mBind.ivAvatar.setOnLongClickListener(v -> {
+            DialogUtil.showHostInfoDialog(roomInfo);
+            return false;
+        });
+    }
+
+    private void initDanmu() {
+        mBind.danmu.prepare();
     }
 
     private void initViewModel() {
@@ -162,9 +171,7 @@ public class MainActivity extends BaseBindingActivity<ActivityMainBinding, RoomV
             btnYes.setOnClickListener(v->{
                 player.play();
             });
-            btnNo.setOnClickListener(v->{
-                dialog.dismiss();
-            });
+            btnNo.setOnClickListener(v-> dialog.dismiss());
             dialog.show();
         }else {
             player.play();
@@ -172,29 +179,21 @@ public class MainActivity extends BaseBindingActivity<ActivityMainBinding, RoomV
     }
 
     private void initWebSocket() {
-        DyConnect dyConnect = new DyConnect(roomInfo, new DyConnect.MessageReceiveListener() {
+        DyDanMuConnect dyConnect = new DyDanMuConnect(roomInfo, new DyDanMuConnect.MessageReceiveListener() {
             @Override
-            public void onReceiver(DyConnect.DouYuDanMu douYuDanMu) {
-                danmuList.add(douYuDanMu);
-                runOnUiThread(() -> {
-                    adapter.setDataList(danmuList);
-                    mBind.ryDm.smoothScrollToPosition(adapter.getItemCount() - 1);
-                });
-            }
-
-            @Override
-            public void onConnectError(Exception e) {
-
-            }
-
-            @Override
-            public void onConnectClose(int code, String reason, boolean remote) {
-
+            public void onReceiver(DyDanMuConnect.DouYuDanMu douYuDanMu) {
+                if(null != douYuDanMu) {
+                    BasicDanMuModel danMuView = new BasicDanMuModel(MainActivity.this, douYuDanMu.getTxt());
+                    mBind.danmu.add(danMuView);
+                    runOnUiThread(() -> {
+                        mDanMuAdapter.addData(douYuDanMu);
+                    });
+                }
             }
         });
         try {
-            connect = dyConnect.createConnect();
-            connect.connectBlocking();
+            danMuWebSocketClient = dyConnect.createConnect();
+            danMuWebSocketClient.connectBlocking();
         }catch (Exception e) {
             Log.e(TAG, "initWebSocket: " + e.getMessage() );
         }
@@ -209,27 +208,22 @@ public class MainActivity extends BaseBindingActivity<ActivityMainBinding, RoomV
     }
 
     private void initView() {
-        adapter = new BulletScreenAdapter(danmuList);
+        mDanMuAdapter = new DanMuAdapter(mBind.ryDm, R.layout.layout_item_dm, mBind.viewToBottom.getRoot());
         mBind.ryDm.setLayoutManager(new LinearLayoutManager(this));
-        mBind.ryDm.setAdapter(adapter);
+        mBind.ryDm.addOnScrollListener(mDanMuAdapter.getScrollListener());
+
     }
 
     private void initFullScreenDialog() {
         mFullScreenDialog = new Dialog(this, android.R.style.Theme_Black_NoTitleBar_Fullscreen) {
-            private long mBackPressed;
             @Override
             public void onBackPressed() {
-                if (mExoPlayerFullscreen
-                        && mBackPressed <= System.currentTimeMillis()) {
-                    mBackPressed = 1000 + System.currentTimeMillis();
-                    Toast.makeText(MainActivity.this, "再次按下返回键退出", Toast.LENGTH_SHORT).show();
-                    return;
-                }
                 closeFullScreenDialog();
                 super.onBackPressed();
             }
         };
     }
+
     private void openFullScreenDialog() {
         mLastHeight = mBind.videoView.getHeight();
         mLastWidth = mBind.videoView.getWidth();
@@ -269,7 +263,7 @@ public class MainActivity extends BaseBindingActivity<ActivityMainBinding, RoomV
 
     @Override
     public void onBackPressed() {
-        connect.close();
+        danMuWebSocketClient.close();
         player.stop();
         super.onBackPressed();
     }
@@ -278,4 +272,46 @@ public class MainActivity extends BaseBindingActivity<ActivityMainBinding, RoomV
     protected void onDestroy() {
         super.onDestroy();
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
+        switch (playbackState) {
+            case Player.STATE_IDLE: {
+                //播放器没有可播放的媒体。
+                System.err.println("播放器没有可播放的媒体");
+                break;
+            }
+            case Player.STATE_BUFFERING: {
+                //播放器无法立即从当前位置开始播放。这种状态通常需要加载更多数据时发生。
+                System.err.println("正在加载数据");
+                mBind.spinKit.setVisibility(View.VISIBLE);
+                break;
+            }
+            case Player.STATE_READY: {
+                // 播放器可以立即从当前位置开始播放。如果{@link#getPlayWhenReady（）}为true，否则暂停。
+                //当点击暂停或者播放时都会调用此方法
+                //当跳转进度时，进度加载完成后调用此方法
+                System.err.println("播放器可以立即从当前位置开始");
+                mBind.spinKit.setVisibility(View.GONE);
+                break;
+            }
+            case Player.STATE_ENDED: {
+                //播放器完成了播放
+                System.err.println("视频结束了噢");
+                mBind.spinKit.setVisibility(View.VISIBLE);
+                break;
+            }
+        }
+    }
+
 }

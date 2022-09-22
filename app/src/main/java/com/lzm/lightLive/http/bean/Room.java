@@ -4,11 +4,11 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import com.google.gson.annotations.SerializedName;
 
-public abstract class Room implements Parcelable {
+public class Room implements Parcelable {
 
-    public static final int LIVE_STATUS_ON = 1;             //直播中
     public static final int LIVE_STATUS_OFF = 0;            //未直播
-    public static final int LIVE_STATUS_PLAY_BACK = 2;      //直播回放
+    public static final int LIVE_STATUS_ON = 1;             //直播中
+    public static final int LIVE_STATUS_REPLAY = 2;         //直播回放
 
     public static final int LIVE_PLAT_DY = 1;               //斗鱼
     public static final int LIVE_PLAT_HY = 2;               //虎牙
@@ -35,8 +35,7 @@ public abstract class Room implements Parcelable {
     protected int streamStatus;                     //直播状态
 
     protected String liveStreamUri;                 //直播流地址
-
-    public abstract int getPlatform();
+    protected int platform;                         //平台
 
     public Room(long heatNum, int fansNum,
                 String hostAvatar, String roomId,
@@ -89,6 +88,12 @@ public abstract class Room implements Parcelable {
         dest.writeString(liveStreamUri);
         dest.writeString(cateName);
         dest.writeInt(streamStatus);
+        dest.writeInt(platform);
+    }
+
+    public Room(String roomId, int platform) {
+        this.roomId = roomId;
+        this.platform = platform;
     }
 
     public Room(Parcel in) {
@@ -102,6 +107,7 @@ public abstract class Room implements Parcelable {
         liveStreamUri = in.readString();
         cateName = in.readString();
         streamStatus = in.readInt();
+        platform = in.readInt();
     }
 
 
@@ -185,6 +191,14 @@ public abstract class Room implements Parcelable {
         this.cateName = cateName;
     }
 
+    public int getPlatform() {
+        return platform;
+    }
+
+    public void setPlatform(int platform) {
+        this.platform = platform;
+    }
+
     @Override
     public String toString() {
         return "Room{" +
@@ -198,7 +212,7 @@ public abstract class Room implements Parcelable {
                 ", cateName='" + cateName + '\'' +
                 ", streamStatus=" + streamStatus +
                 ", liveStreamUri='" + liveStreamUri + '\'' +
-                ", platform=" + getPlatform() +
+                ", platform=" + platform +
                 '}';
     }
 }

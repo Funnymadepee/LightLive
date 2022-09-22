@@ -34,6 +34,8 @@ android {
 
 dependencies {
     implementation project(":lib_base")
+    implementation project(":lib_danmu")
+    implementation project(":lib_tars")
     implementation 'androidx.appcompat:appcompat:1.4.1'
     implementation 'com.google.android.material:material:1.5.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
@@ -64,4 +66,11 @@ dependencies {
     implementation "com.google.android.exoplayer:exoplayer:${configs.exoplayer}"
 
     implementation "com.github.kongzue.DialogX:DialogX:${configs.dialogx_version}"
+
+    //Lottie动画
+    implementation "com.airbnb.android:lottie:3.6.0"
+
+    implementation 'io.github.medyo:android-about-page:2.0.0'
+
+    implementation 'com.github.ybq:Android-SpinKit:1.4.0'
 }

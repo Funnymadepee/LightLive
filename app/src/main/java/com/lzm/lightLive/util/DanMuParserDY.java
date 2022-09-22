@@ -2,11 +2,11 @@ package com.lzm.lightLive.util;
 
 import android.util.Log;
 
-import com.lzm.lightLive.http.request.dy.DyConnect;
+import com.lzm.lightLive.http.request.dy.DyDanMuConnect;
 
 public class DanMuParserDY {
 
-    public static DyConnect.DouYuDanMu parse(String message) {
+    public static DyDanMuConnect.DouYuDanMu parse(String message) {
         if(message.contains("type@=chatmsg")) {
             String uid = message.substring(message.indexOf("/uid@="), message.indexOf("/nn@="))
                     .replaceAll("/uid@=", "");
@@ -26,7 +26,7 @@ public class DanMuParserDY {
             String avatar = message.substring(message.indexOf("/ic@="), message.indexOf("/level@="))
                     .replaceAll("/ic@=", "");
 
-            DyConnect.DouYuDanMu dyDanMu = new DyConnect.DouYuDanMu("chatmsg", Long.parseLong(uid),
+            DyDanMuConnect.DouYuDanMu dyDanMu = new DyDanMuConnect.DouYuDanMu("chatmsg", Long.parseLong(uid),
                     nickName, content, level, avatar, badge, Integer.parseInt(badgeLevel));
 
             //TODO 根据uid / nickName 查找黑名单 / vip重点关注用户

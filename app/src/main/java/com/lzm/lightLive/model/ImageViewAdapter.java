@@ -1,7 +1,6 @@
 package com.lzm.lightLive.model;
 
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.widget.ImageView;
 import androidx.databinding.BindingAdapter;
 import com.bumptech.glide.Glide;

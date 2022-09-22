@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_margin="1dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/shape_cate_item"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ImageView
+        android:id="@+id/iv_cate_icon"
+        tools:src="@drawable/ic_menu_tag"
+        android:layout_marginTop="20dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_width="80dp"
+        android:layout_height="80dp"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        tools:text="热门分类"
+        app:layout_constraintTop_toBottomOf="@id/iv_cate_icon"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:background="@drawable/shape_live_cate"
+        app:drawableStartCompat="@drawable/ic_home"
+        android:padding="10dp"
+        android:drawablePadding="4dp"
+        android:layout_marginTop="5dp"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:id="@+id/tv_cate_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        tools:text="分类链接"
+        android:id="@+id/tv_cate_url"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/tv_cate_name"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        tools:text="在线人数"
+        android:id="@+id/tv_heat_num"
+        app:layout_constraintTop_toBottomOf="@id/tv_cate_name"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:drawablePadding="2dp"
+        android:padding="5dp"
+        app:drawableStartCompat="@drawable/ic_heat"
+        android:background="@drawable/shape_live_heat"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="20dp"
+        android:textColor="@color/white"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
