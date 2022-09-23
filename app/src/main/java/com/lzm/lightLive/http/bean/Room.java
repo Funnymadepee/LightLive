@@ -34,13 +34,14 @@ public class Room implements Parcelable {
     @SerializedName(value = "room_status", alternate = {"streamStatus"})
     protected int streamStatus;                     //直播状态
 
-    protected String liveStreamUri;                 //直播流地址
+    protected String liveStreamUriHigh;             //直播流地址_高清
+    protected String liveStreamUriLow;              //直播流地址_低清
     protected int platform;                         //平台
 
     public Room(long heatNum, int fansNum,
                 String hostAvatar, String roomId,
                 String roomName, String thumbUrl,
-                String hostName, String liveStreamUri,
+                String hostName, String liveStreamUriHigh, String liveStreamUriLow,
                 String cateName, int liveStatus) {
         this.heatNum = heatNum;
         this.fansNum = fansNum;
@@ -49,7 +50,8 @@ public class Room implements Parcelable {
         this.roomName = roomName;
         this.thumbUrl = thumbUrl;
         this.hostName = hostName;
-        this.liveStreamUri = liveStreamUri;
+        this.liveStreamUriHigh = liveStreamUriHigh;
+        this.liveStreamUriLow = liveStreamUriLow;
         this.cateName = cateName;
         this.streamStatus = liveStatus;
     }
@@ -80,7 +82,8 @@ public class Room implements Parcelable {
         dest.writeString(roomName);
         dest.writeString(thumbUrl);
         dest.writeString(hostName);
-        dest.writeString(liveStreamUri);
+        dest.writeString(liveStreamUriHigh);
+        dest.writeString(liveStreamUriLow);
         dest.writeString(cateName);
         dest.writeInt(streamStatus);
         dest.writeInt(platform);
@@ -99,7 +102,8 @@ public class Room implements Parcelable {
         roomName = in.readString();
         thumbUrl = in.readString();
         hostName = in.readString();
-        liveStreamUri = in.readString();
+        liveStreamUriHigh = in.readString();
+        liveStreamUriLow = in.readString();
         cateName = in.readString();
         streamStatus = in.readInt();
         platform = in.readInt();
@@ -162,12 +166,20 @@ public class Room implements Parcelable {
         this.hostName = hostName;
     }
 
-    public String getLiveStreamUri() {
-        return liveStreamUri;
+    public String getLiveStreamUriHigh() {
+        return liveStreamUriHigh;
     }
 
-    public void setLiveStreamUri(String liveStreamUri) {
-        this.liveStreamUri = liveStreamUri;
+    public void setLiveStreamUriHigh(String liveStreamUriHigh) {
+        this.liveStreamUriHigh = liveStreamUriHigh;
+    }
+
+    public String getLiveStreamUriLow() {
+        return liveStreamUriLow;
+    }
+
+    public void setLiveStreamUriLow(String liveStreamUriLow) {
+        this.liveStreamUriLow = liveStreamUriLow;
     }
 
     public int getStreamStatus() {
@@ -206,7 +218,8 @@ public class Room implements Parcelable {
                 ", hostName='" + hostName + '\'' +
                 ", cateName='" + cateName + '\'' +
                 ", streamStatus=" + streamStatus +
-                ", liveStreamUri='" + liveStreamUri + '\'' +
+                ", liveStreamUriHigh='" + liveStreamUriHigh + '\'' +
+                ", liveStreamUriLow='" + liveStreamUriLow + '\'' +
                 ", platform=" + platform +
                 '}';
     }

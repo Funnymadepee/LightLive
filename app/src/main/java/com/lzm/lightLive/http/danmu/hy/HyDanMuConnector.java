@@ -1,5 +1,6 @@
 package com.lzm.lightLive.http.danmu.hy;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.lzm.lightLive.common.Const;
@@ -57,8 +58,8 @@ public class HyDanMuConnector extends DanMuServiceConnector {
     private HuYaDanMuUserDataTarsBase hyDanMuUserDataTarsBase;
     private HuYaDanMuFormatDataTarsBase hyDanMuFormatDataTarsBase;
 
-    public HyDanMuConnector(Room room, WebSocketListener listener) {
-        super(room, listener);
+    public HyDanMuConnector(Context context, Room room, WebSocketListener listener) {
+        super(context, room, listener);
         try {
             heartBeatArray = HexUtil.decodeHex(heartbeat);
         }catch (Exception e) {

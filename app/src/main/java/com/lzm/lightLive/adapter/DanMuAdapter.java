@@ -1,11 +1,10 @@
 package com.lzm.lightLive.adapter;
 
-import android.graphics.Color;
+import android.content.Context;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import androidx.annotation.NonNull;
@@ -16,9 +15,8 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.lzm.lib_base.util.FasterLinearSmoothScroller;
 import com.lzm.lightLive.R;
 import com.lzm.lightLive.http.danmu.basic.DanMu;
-import com.lzm.lightLive.http.danmu.basic.DanMuMessageType;
 import com.lzm.lightLive.util.AnimUtil;
-import com.lzm.lightLive.util.UiTools;
+import com.lzm.lightLive.util.ResourceUtil;
 
 public class DanMuAdapter extends BaseQuickAdapter<DanMu, BaseViewHolder>
         implements ScrollEvent {
@@ -31,6 +29,8 @@ public class DanMuAdapter extends BaseQuickAdapter<DanMu, BaseViewHolder>
 
     private final View footerView;
 
+    private boolean isDanMuUpdate = true;
+
     private FasterLinearSmoothScroller mScroller;
 
     public DanMuAdapter(RecyclerView recyclerView, int layoutResId, View footerView) {
@@ -42,7 +42,7 @@ public class DanMuAdapter extends BaseQuickAdapter<DanMu, BaseViewHolder>
 
         mScroller = new FasterLinearSmoothScroller(recyclerView.getContext(), LinearSmoothScroller.SNAP_TO_ANY);
         mScroller.setTargetPosition(getItemCount() - 1);
-        FasterLinearSmoothScroller.setTime(15f);
+        mScroller.setTime(30f);
 
         footerView.setOnClickListener(v -> {
             mScroller.setTargetPosition(getItemCount() - 1);
@@ -54,9 +54,11 @@ public class DanMuAdapter extends BaseQuickAdapter<DanMu, BaseViewHolder>
 
     @Override
     public void addData(@NonNull DanMu data) {
-        super.addData(data);
-        if(!isFooterViewShow()) {
-            mRecyclerView.smoothScrollToPosition(getItemCount() - 1);
+        if (isDanMuUpdate) {
+            super.addData(data);
+            if(!isFooterViewShow()) {
+                mRecyclerView.smoothScrollToPosition(getItemCount() - 1);
+            }
         }
     }
 
@@ -66,6 +68,7 @@ public class DanMuAdapter extends BaseQuickAdapter<DanMu, BaseViewHolder>
         if (null == item.getUserIfo()) return;
         if (null == item.getDanMuFormatData()) return;
 
+        Context context = holder.itemView.getContext();
         String nickName = item.getUserIfo().getNickName();
         String badge = item.getUserIfo().getBadge();
         String badgeLevel = item.getUserIfo().getBadgeLevel();
@@ -76,10 +79,20 @@ public class DanMuAdapter extends BaseQuickAdapter<DanMu, BaseViewHolder>
         int fontColor = item.getDanMuFormatData().getFontColor();
 
         SpannableString string = new SpannableString(nickName + " : " + item.getContent());
-        string.setSpan(new ForegroundColorSpan(Color.parseColor("#03A9F4")),
-                0, nickName.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-        string.setSpan(new ForegroundColorSpan(Color.parseColor("#03A9F4")),
-                nickName.length(), nickName.length() + 3, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+        //Nickname Span
+        string.setSpan(new ForegroundColorSpan(
+                ResourceUtil.attrColor(context, R.attr.basic_dm_nickname_color)),
+                0,
+                nickName.length(),
+                Spanned.SPAN_INCLUSIVE_EXCLUSIVE
+        );
+        //divider : Span
+        string.setSpan(new ForegroundColorSpan(
+                ResourceUtil.attrColor(context, R.attr.basic_dm_nickname_color)),
+                nickName.length(),
+                nickName.length() + 3,
+                Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+        //danMu text Span
         string.setSpan(new ForegroundColorSpan(fontColor),
                 nickName.length() + 3, string.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
         holder.setText(R.id.tv_content, string);
@@ -99,7 +112,7 @@ public class DanMuAdapter extends BaseQuickAdapter<DanMu, BaseViewHolder>
 
         if(isVip) {
             holder.getView(R.id.fl_item_root).startAnimation(AnimationUtils.loadAnimation(holder.itemView.getContext(), R.anim.item_anim_vip));
-            holder.getView(R.id.fl_item_root).setBackground(holder.itemView.getContext().getDrawable(R.drawable.shape_douyu_vip));
+            holder.getView(R.id.fl_item_root).setBackground(holder.itemView.getContext().getDrawable(R.drawable.shape_dy_vip));
         }else {
             holder.getView(R.id.fl_item_root).clearAnimation();
             holder.getView(R.id.fl_item_root).setBackgroundColor(holder.itemView.getContext().getColor(R.color.tran));
@@ -161,5 +174,13 @@ public class DanMuAdapter extends BaseQuickAdapter<DanMu, BaseViewHolder>
 
     private boolean isFooterViewShow() {
         return footerView.getVisibility() == View.VISIBLE;
+    }
+
+    public boolean isDanMuUpdate() {
+        return isDanMuUpdate;
+    }
+
+    public void setDanMuUpdate(boolean danMuUpdate) {
+        this.isDanMuUpdate = danMuUpdate;
     }
 }

@@ -5,7 +5,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/shape_douyu"
+    android:background="?attr/basic_dm_background"
     android:paddingVertical="5dp">
 
     <LinearLayout
@@ -35,6 +35,8 @@
 
         <TextView
             android:id="@+id/tv_content"
+            tools:text="这是一条弹幕吧"
+            android:textColor="?attr/basic_dm_text_color"
             android:layout_marginStart="5dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />

@@ -33,9 +33,9 @@ public class HostAdapter extends BaseQuickAdapter<Room, BaseViewHolder> {
 
     private static final String TAG = "HostAdapter";
 
-    public static final int PAGE_MAX_ITEM = 10;
+    public int PAGE_MAX_ITEM = 10;
 
-    private List<Room> cacheList = new ArrayList<>();
+    private final List<Room> cacheList = new ArrayList<>();
 
     public HostAdapter(int layoutResId, List<Room> data) {
         super(layoutResId, data);
@@ -86,15 +86,11 @@ public class HostAdapter extends BaseQuickAdapter<Room, BaseViewHolder> {
         }
 
         if (item.getStreamStatus() == Room.LIVE_STATUS_ON) {
-//            helper.itemView.setVisibility(View.VISIBLE);
-//            UiTools.setViewSaturation(helper.itemView, 1);
-            helper.setText(R.id.tv_room_status, "直播中");
+            helper.setText(R.id.tv_room_status, R.string.live_status_on);
             helper.getView(R.id.tv_room_status).setActivated(true);
         }else {
-            helper.setText(R.id.tv_room_status,  "未直播");
+            helper.setText(R.id.tv_room_status,  R.string.live_status_off);
             helper.getView(R.id.tv_room_status).setActivated(false);
-//            UiTools.setViewGray(helper.itemView);
-//            helper.itemView.setVisibility(View.GONE);
         }
 
         helper.getView(R.id.iv_avatar).setOnLongClickListener(v -> {
@@ -105,13 +101,11 @@ public class HostAdapter extends BaseQuickAdapter<Room, BaseViewHolder> {
     }
 
     private void jumpToRoom(Context context, Room room) {
-        Log.e(TAG, "jumpToRoom: " + room );
         if (room.getPlatform() == Room.LIVE_PLAT_DY) {
-            WaitDialog.show("请求中...");
+            WaitDialog.show(R.string.requesting);
             String time = String.valueOf(System.currentTimeMillis());
             String sign = CommonUtil.encrypt2ToMD5(room.getRoomId() + time);
             DyStreamHttpRequest mDyStreamCall = RetrofitManager.getDyStreamRetrofit().create(DyStreamHttpRequest.class);
-            Log.e(TAG, "jumpToRoom RoomId: " + room.getRoomId() + " time: " + time + " sign:" + sign );
             mDyStreamCall.queryRoomStreamInfo(room.getRoomId(), time, sign, room.getRoomId(), room.getRoomId())
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -125,14 +119,15 @@ public class HostAdapter extends BaseQuickAdapter<Room, BaseViewHolder> {
                             String live = data.getRtmpLive().split("_")[0];
                             String high = "http://hw-tct.douyucdn.cn/live/" + live + ".flv?uuid=";
                             String low = "http://hw-tct.douyucdn.cn/live/" + live + "_900.flv?uuid=";
-                            room.setLiveStreamUri(high);
+                            room.setLiveStreamUriHigh(high);
+                            room.setLiveStreamUriLow(low);
                             WaitDialog.dismiss();
                             startPlay(context, room);
                         }
 
                         @Override
                         public void onError(Throwable e) {
-                            TipDialog.show("获取失败！", WaitDialog.TYPE.ERROR,500);
+                            TipDialog.show(R.string.no_stream_hint, WaitDialog.TYPE.ERROR,500);
                             Log.e(TAG, "onError: " + e.getMessage() );
                         }
 
@@ -152,9 +147,25 @@ public class HostAdapter extends BaseQuickAdapter<Room, BaseViewHolder> {
             intent.putExtra("bundle", bundle);
             context.startActivity(intent);
         }else {
-            String msg = "主播 " + room.getHostName() + " 暂时未开播噢~";
-            TipDialog.show(msg, WaitDialog.TYPE.WARNING, 1500);
+            TipDialog.show(R.string.no_stream_hint, WaitDialog.TYPE.WARNING, 1500);
         }
     }
 
+    public int indexOfRoomId(String roomId) {
+        if (getData().size() == 0) return -1;
+        for (int i = 0; i < getData().size(); i++) {
+            if (roomId.equals(getData().get(i).getRoomId())) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public int getPageMaxItem() {
+        return PAGE_MAX_ITEM;
+    }
+
+    public void setPageMaxItem(int pageMaxItem) {
+        this.PAGE_MAX_ITEM = pageMaxItem;
+    }
 }

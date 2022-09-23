@@ -1,6 +1,7 @@
 package com.lzm.lightLive.model;
 
 import android.util.Log;
+
 import androidx.lifecycle.ViewModel;
 import com.lzm.lightLive.http.bean.dy.DyStream;
 import com.lzm.lightLive.http.BaseResult;
@@ -18,7 +19,12 @@ public class StreamViewModel extends ViewModel {
 
     DyStreamHttpRequest mDyStreamCall = RetrofitManager.getDyStreamRetrofit().create(DyStreamHttpRequest.class);
 
-    public void requestRoomStreamInfo(String id) {
+    public interface OnStreamInfoResultListener {
+        void onResult(String high, String low);
+        void onError(Throwable throwable);
+    }
+
+    public void requestRoomStreamInfo(String id, OnStreamInfoResultListener resultListener) {
         String time = String.valueOf(System.currentTimeMillis());
         String sign = CommonUtil.encrypt2ToMD5(id + time);
         mDyStreamCall.queryRoomStreamInfo(id, time, sign, id, id).subscribeOn(Schedulers.io())
@@ -33,11 +39,13 @@ public class StreamViewModel extends ViewModel {
                         String live = data.getRtmpLive().split("_")[0];
                         String high = "http://hw-tct.douyucdn.cn/live/" + live + ".flv?uuid=";
                         String low = "http://hw-tct.douyucdn.cn/live/" + live + "_900.flv?uuid=";
+                        resultListener.onResult(high, low);
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         Log.e(TAG, "onError: " + e.getMessage() );
+                        resultListener.onError(e);
                     }
 
                     @Override

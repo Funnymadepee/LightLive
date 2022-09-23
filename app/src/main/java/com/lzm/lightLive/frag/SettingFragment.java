@@ -9,6 +9,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import com.lzm.lightLive.R;
+import com.lzm.lightLive.util.CacheUtil;
+import com.lzm.lightLive.util.SpUtils;
 
 import mehdi.sakout.aboutpage.AboutPage;
 import mehdi.sakout.aboutpage.Element;
@@ -21,18 +23,16 @@ public class SettingFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        Element versionElement = new Element();
-        versionElement.setTitle("Version 1.0");
-        Element describe = new Element();
-        describe.setTitle("这是一个简单的直播聚合软件");
+        Element author = new Element();
+        author.setTitle("By LZM");
+        author.setOnClickListener(v -> {
+            SpUtils.getInstance(getContext()).clear();
+        });
 
         return new AboutPage(getContext())
-                .isRTL(false)
                 .setDescription(getString(R.string.app_name))
-                .addItem(versionElement)
-                .addItem(describe)
-                .addEmail("liangzemin1997@gmail.com", "Gmail")
-                .addGitHub("FunnyMadePee", "GitHub")
+                .addEmail("liangzemin1997@gmail.com", "v我50")
+                .addItem(author)
                 .create();
 
     }

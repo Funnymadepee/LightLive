@@ -11,7 +11,7 @@
         android:id="@+id/tv_level_icon"
         android:layout_width="wrap_content"
         android:layout_height="15dp"
-        android:background="@drawable/shape_douyu_level_left"
+        android:background="@drawable/shape_dy_level_left"
         android:paddingStart="4dp"
         android:paddingEnd="2dp"
         android:gravity="center"
@@ -22,14 +22,14 @@
 
     <TextView
         android:id="@+id/tv_level"
-        android:text="555"
+        tools:text="555"
         android:paddingStart="2dp"
         android:paddingEnd="4dp"
         android:gravity="center_vertical"
         android:layout_width="wrap_content"
         android:layout_height="15dp"
-        android:background="@drawable/shape_douyu_level_right"
-        android:textColor="@color/textColor"
+        android:background="@drawable/shape_dy_level_right"
+        android:textColor="?attr/basic_dm_background"
         android:textSize="10sp"
         tools:ignore="SmallSp" />
 </LinearLayout>

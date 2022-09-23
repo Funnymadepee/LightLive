@@ -1,8 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <attr name="basic_background" format="color" />
-    <attr name="basic_item_background" format="color" />
+    <attr name="basic_dm_background" format="color" />
+    <attr name="basic_dm_text_color" format="color" />
+    <attr name="basic_dm_nickname_color" format="color" />
+    <attr name="basic_stroke_color" format="color" />
+    <attr name="basic_item_background" format="reference" />
     <attr name="basic_text_color" format="color" />
+    <attr name="basic_title_color" format="color" />
+    <attr name="basic_nav_icon_tint_color" format="color" />
+    <attr name="basic_nav_text_color" format="color" />
+    <attr name="basic_blur_overlay_color" format="color" />
+    <attr name="basic_host_bar_background" format="color" />
+
+    <attr name="basic_tab_background" format="color" />
+    <attr name="basic_tab_text" format="color" />
+    <attr name="basic_tab_text_selected" format="color" />
+    <attr name="basic_tab_indicator_color" format="color" />
+
+    <attr name="basic_ripple_state_pressed" format="color" />
+    <attr name="basic_ripple_state_focused" format="color" />
+    <attr name="basic_ripple_state_activated" format="color" />
+    <attr name="basic_ripple_state_selected" format="color" />
 
     <style name="CustomIndicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
         <item name="android:width">64dp</item>

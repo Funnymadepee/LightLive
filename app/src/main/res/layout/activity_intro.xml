@@ -6,13 +6,13 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/dark"
+        android:background="?attr/basic_background"
         tools:context=".act.IntroActivity">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appBarLayout"
             android:elevation="0.1dp"
-            android:background="@color/dark"
+            android:background="?attr/basic_background"
             android:layout_width="match_parent"
             android:layout_height="260dp">
 
@@ -34,7 +34,7 @@
 
             <View
                 android:id="@+id/anchor_view"
-                android:background="@color/white"
+                android:background="?attr/basic_background"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
 
@@ -57,13 +57,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:realtimeBlurRadius="20dp"
-                app:realtimeOverlayColor="#B2070707"/>
+                app:realtimeOverlayColor="?attr/basic_blur_overlay_color"/>
 
             <TextView
                 tools:text="推荐"
                 android:id="@+id/tv_title"
                 android:textSize="34sp"
-                android:textColor="@color/white"
+                android:textColor="?attr/basic_title_color"
                 android:textStyle="bold"
                 android:layout_marginStart="10dp"
                 android:layout_marginBottom="10.18dp"
@@ -81,14 +81,16 @@
             android:visibility="visible"
             app:realtimeBlurRadius="20dp"
             app:layout_behavior="com.lzm.lib_base.behavior.BottomNavBarBehavior"
-            app:realtimeOverlayColor="#B2070707" />
+            app:realtimeOverlayColor="?attr/basic_blur_overlay_color" />
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottomNavigation"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_gravity="bottom"
-            app:itemIconTint="#ffffff"
+            app:itemTextColor="?attr/basic_nav_text_color"
+            android:textSize="20sp"
+            app:itemIconTint="?attr/basic_nav_icon_tint_color"
             android:background="@drawable/shape_zml_transparent"
             app:layout_behavior="com.lzm.lib_base.behavior.BottomNavBarBehavior"
             android:visibility="visible"

@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <com.lzm.lightLive.view.NestedScrollableHost
+    <com.lzm.lib_base.view.NestedScrollableHost
         android:layout_marginTop="50dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -13,11 +14,10 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 
-    </com.lzm.lightLive.view.NestedScrollableHost>
+    </com.lzm.lib_base.view.NestedScrollableHost>
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tab"
-        android:background="@color/textColor"
         android:layout_width="match_parent"
         android:layout_height="50dp"/>
 

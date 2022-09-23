@@ -23,8 +23,9 @@ public class DanMuView extends View implements IDanMuParent {
     private volatile ArrayList<OnDanMuViewTouchListener> onDanMuViewTouchListeners;
     private OnDanMuParentViewTouchCallBackListener onDanMuParentViewTouchCallBackListener;
     private boolean drawFinished = false;
+    private boolean interceptTouchEvent = true;
 
-    private Object lock = new Object();
+    private final Object lock = new Object();
 
     public DanMuView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -97,6 +98,8 @@ public class DanMuView extends View implements IDanMuParent {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        if (!interceptTouchEvent) return false;
+
         if (hasCanTouchDanMus()) {
             getParent().requestDisallowInterceptTouchEvent(true);
         }
@@ -144,11 +147,7 @@ public class DanMuView extends View implements IDanMuParent {
             return;
         }
         synchronized (lock) {
-            if (Build.VERSION.SDK_INT >= 16) {
-                this.postInvalidateOnAnimation();
-            } else {
-                this.postInvalidate();
-            }
+            this.postInvalidateOnAnimation();
             if ((!drawFinished)) {
                 try {
                     lock.wait();
@@ -238,5 +237,13 @@ public class DanMuView extends View implements IDanMuParent {
 
     public void setOnDanMuExistListener(OnDetectHasCanTouchedDanMusListener onDetectHasCanTouchedDanMusListener) {
         this.onDetectHasCanTouchedDanMusListener = onDetectHasCanTouchedDanMusListener;
+    }
+
+    public boolean isInterceptTouchEvent() {
+        return interceptTouchEvent;
+    }
+
+    public void setInterceptTouchEvent(boolean interceptTouchEvent) {
+        this.interceptTouchEvent = interceptTouchEvent;
     }
 }

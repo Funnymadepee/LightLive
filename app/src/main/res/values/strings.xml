@@ -6,4 +6,28 @@
     <string name="menu_user">关注</string>
     <string name="menu_setting">设置</string>
 
+    <string name="DouYu">斗鱼</string>
+    <string name="HuYa">虎牙</string>
+    <string name="BiliBili">BiliBili</string>
+
+    <string name="live_status_on">直播中</string>
+    <string name="live_status_off">未开播</string>
+    <string name="live_status_replay">直播回放</string>
+
+    <string name="requesting">请求中…</string>
+    <string name="failed">获取失败！</string>
+
+
+    <string name="using_cell_data">正在使用流量</string>
+    <string name="continue_to_watch">是否继续观看?</string>
+    <string name="confirm">确认</string>
+    <string name="cancel">取消</string>
+    <string name="no_prompt">不再提示</string>
+
+    <string name="no_stream_hint">直播地址为空,主播可能未开播</string>
+
+    <string name="click_retry">点击重试</string>
+    <string name="no_other_definition">当前没有更多清晰度啦</string>
+    <string name="blank" />
+
 </resources>

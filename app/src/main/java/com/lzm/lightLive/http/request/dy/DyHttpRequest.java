@@ -34,6 +34,6 @@ public interface DyHttpRequest{
     Observable<DyCate> queryAllCategories();
 
     @GET("gapi/rkc/directory/mixList/2_{cate_id}/{page}")
-    Observable<BaseResult<DySortRoom>> queryAllCategories(@Path("cate_id") int cateId, @Path("page") int page);
+    Observable<BaseResult<DySortRoom>> queryCateHosts(@Path("cate_id") int cateId, @Path("page") int page);
 
 }

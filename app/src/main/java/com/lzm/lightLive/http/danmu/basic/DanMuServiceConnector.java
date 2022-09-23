@@ -1,5 +1,6 @@
 package com.lzm.lightLive.http.danmu.basic;
 
+import android.content.Context;
 import android.util.Log;
 
 import java.net.URI;
@@ -19,9 +20,11 @@ public abstract class DanMuServiceConnector {
     private ExecutorService executorService;
     private WebSocketClient webSocketClient;
     protected WebSocketListener listener;
+    protected Context mContext;
 
-    public DanMuServiceConnector(Room room, WebSocketListener listener) {
+    public DanMuServiceConnector(Context context, Room room, WebSocketListener listener) {
         this.room = room;
+        this.mContext = context;
         this.listener = listener;
         executorService = Executors.newCachedThreadPool();
     }

@@ -1,17 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <WebView
-        android:id="@+id/webView"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/ry_cate"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tv_title"
+    <com.lzm.lib_base.view.RealtimeBlurView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        app:realtimeBlurRadius="20dp"
+        app:realtimeOverlayColor="?attr/basic_blur_overlay_color"
+        android:layout_height="50dp"/>
+
+    <TextView
+        android:id="@+id/tv_cate_name"
+        tools:text="分类名"
+        android:textSize="24sp"
+        android:textColor="?attr/basic_title_color"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"/>
 
 </FrameLayout>

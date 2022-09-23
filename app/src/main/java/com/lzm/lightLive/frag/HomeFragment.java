@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.lzm.lib_base.BaseFreshFragment;
 import com.lzm.lightLive.R;
 import com.lzm.lightLive.adapter.HostAdapter;
+import com.lzm.lightLive.common.Const;
 import com.lzm.lightLive.http.BaseResult;
 import com.lzm.lightLive.http.RetrofitManager;
 import com.lzm.lightLive.http.bean.Room;
@@ -64,8 +65,6 @@ public class HomeFragment extends BaseFreshFragment<Room> {
         return new GridLayoutManager(context, 2);
     }
 
-    static String dy_base = "https://apic.douyucdn.cn/upload/";
-
     DyHttpRequest call2 = RetrofitManager.getDyRetrofit().create(DyHttpRequest.class);
 
     private void requestHotHost() {
@@ -95,7 +94,7 @@ public class HomeFragment extends BaseFreshFragment<Room> {
                                     prefix = "_big.jpg";
 
                                 }
-                                _temp.setHostAvatar(dy_base + room.getAvatar() + prefix);
+                                _temp.setHostAvatar(Const.AVATAR_URL_DY + room.getAvatar() + prefix);
                                 _temp.setThumbUrl(room.getThumb());
                                 roomList.add(_temp);
                             }
@@ -186,13 +185,10 @@ public class HomeFragment extends BaseFreshFragment<Room> {
         int size = mAdapter.getData().size();
         int cachedSize = mAdapter.getCacheList().size();
 
-        Log.e(TAG, "onLoadMoreRequested: " + pageNum + " dataSize: " + size + " cachedSize: " + cachedSize);
         if(cachedSize > size) {
-            Log.e(TAG, "onLoadMoreRequested: " + size + " max: " +  (size + HostAdapter.PAGE_MAX_ITEM));
-            if(cachedSize > (size + HostAdapter.PAGE_MAX_ITEM)) {
-                mAdapter.addData(size, mAdapter.getCacheList().subList(size, size + HostAdapter.PAGE_MAX_ITEM));
+            if(cachedSize > (size + mAdapter.PAGE_MAX_ITEM)) {
+                mAdapter.addData(size, mAdapter.getCacheList().subList(size, size + mAdapter.PAGE_MAX_ITEM));
             }else {
-                Log.e(TAG, "onLoadMoreRequested: " + cachedSize );
                 mAdapter.addData(size, mAdapter.getCacheList().subList(size, cachedSize));
             }
             baseAdapter.loadMoreComplete();

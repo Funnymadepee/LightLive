@@ -11,7 +11,6 @@ import com.lzm.lib_danmu.view.IDanMuParent;
 
 /**
  * 弹幕需要处理事件的，请使用DanMuParentView作为DanMuView的根布局
- *
  */
 public class DanMuParentView extends RelativeLayout {
 

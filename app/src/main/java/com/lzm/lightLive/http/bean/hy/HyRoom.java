@@ -122,7 +122,7 @@ public class HyRoom extends Room implements Parcelable{
                 ", thumbUrl='" + thumbUrl + '\'' +
                 ", hostName='" + hostName + '\'' +
                 ", streamStatus=" + streamStatus +
-                ", liveStreamUri='" + liveStreamUri + '\'' +
+                ", liveStreamUri='" + liveStreamUriHigh + '\'' +
                 ", hyLiveStatus='" + hyLiveStatus + '\'' +
                 ", hyRealLiveStatus='" + hyRealLiveStatus + '\'' +
                 ", hyWelcomeText='" + hyWelcomeText + '\'' +

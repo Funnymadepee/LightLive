@@ -38,14 +38,16 @@ public class SubscribeFragment extends BaseFreshFragment<Room> {
 
     private int showStatus = -1;
 
-    public SubscribeFragment() {
-    }
-
-    public SubscribeFragment(int showStatus) {
-        this.showStatus = showStatus;
-    }
-
     List<Room> roomList;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Bundle bundle = getArguments();
+        if(null != bundle) {
+            this.showStatus = bundle.getInt("liveStatus");
+        }
+    }
 
     @Override
     protected void getData() {
@@ -57,7 +59,6 @@ public class SubscribeFragment extends BaseFreshFragment<Room> {
 
     @Override
     public void onRefresh() {
-//        super.onRefresh();
         //todo grab form database
         requestSubHostInfo(Const.getSubscribeHost());
     }
@@ -78,7 +79,6 @@ public class SubscribeFragment extends BaseFreshFragment<Room> {
     }
 
     private void requestSubHostInfo(List<Room> roomPair) {
-        mAdapter.getData().clear();
         for (Room pair : roomPair) {
             switch (pair.getPlatform()) {
                 case Room.LIVE_PLAT_DY:
@@ -95,7 +95,12 @@ public class SubscribeFragment extends BaseFreshFragment<Room> {
                                     if(mAdapter != null
                                             && null != result.getData()) {
                                         if(result.getData().getStreamStatus() == showStatus) {
-                                            mAdapter.addData(0, result.getData());
+                                            int position = mAdapter.indexOfRoomId(result.getData().getRoomId());
+                                            if (position == -1) {
+                                                mAdapter.addData(result.getData());
+                                            }else {
+                                                mAdapter.setData(position, result.getData());
+                                            }
                                         }
                                         setRefresh(false);
                                     }
@@ -125,7 +130,12 @@ public class SubscribeFragment extends BaseFreshFragment<Room> {
                                     if(mAdapter != null
                                             && null != result.getData()) {
                                         if(result.getData().getStreamStatus() == showStatus) {
-                                            mAdapter.addData(0, result.getData());
+                                            int position = mAdapter.indexOfRoomId(result.getData().getRoomId());
+                                            if (position == -1) {
+                                                mAdapter.addData(result.getData());
+                                            }else {
+                                                mAdapter.setData(position, result.getData());
+                                            }
                                         }
                                         setRefresh(false);
                                     }

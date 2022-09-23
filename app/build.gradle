@@ -11,6 +11,8 @@ android {
         targetSdk configs.targetSdk
         versionCode configs.versionCode
         versionName configs.versionName
+        renderscriptTargetApi 21
+        renderscriptSupportModeEnabled true
     }
 
     buildTypes {

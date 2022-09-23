@@ -1,5 +1,7 @@
 package com.lzm.lightLive.http.danmu.dy;
 
+import android.content.Context;
+
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
@@ -7,7 +9,7 @@ import java.nio.charset.Charset;
 import com.lzm.lightLive.common.Const;
 import com.lzm.lightLive.http.bean.Room;
 import java.nio.charset.StandardCharsets;
-import com.lzm.lightLive.util.DanMuParserDY;
+
 import com.lzm.lightLive.http.danmu.basic.DanMu;
 import com.lzm.lightLive.http.request.dy.DyRequest;
 import org.java_websocket.handshake.ServerHandshake;
@@ -18,8 +20,8 @@ public class DyDanMuConnector extends DanMuServiceConnector {
 
     private final DyRequest request;
 
-    public DyDanMuConnector(Room room, WebSocketListener listener) {
-        super(room, listener);
+    public DyDanMuConnector(Context context, Room room, WebSocketListener listener) {
+        super(context, room, listener);
         request = new DyRequest();
         start();
     }
@@ -57,7 +59,7 @@ public class DyDanMuConnector extends DanMuServiceConnector {
         Charset charset = StandardCharsets.UTF_8;
         CharBuffer charBuffer = charset.decode(byteBuffer);
         String byteData = charBuffer.toString();
-        DanMu parseDanMu = DanMuParserDY.parse(byteData);
+        DanMu parseDanMu = DanMuParserDY.parse(mContext, byteData);
         if(null != listener
                 && null != parseDanMu) {
             listener.onMessage(parseDanMu);

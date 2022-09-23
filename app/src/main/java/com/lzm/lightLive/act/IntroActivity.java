@@ -10,14 +10,12 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Pair;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.FrameLayout;
 
 import com.airbnb.lottie.LottieDrawable;
@@ -25,6 +23,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback;
 import com.lzm.lib_base.BaseBindFragmentActivity;
 import com.lzm.lib_base.BaseFreshFragment;
+import com.lzm.lib_base.BaseScrollableFragment;
 import com.lzm.lightLive.R;
 import com.lzm.lightLive.adapter.FragmentAdapter;
 import com.lzm.lightLive.databinding.ActivityIntroBinding;
@@ -65,18 +64,16 @@ public class IntroActivity extends BaseBindFragmentActivity<ActivityIntroBinding
     }
 
     @Override
+    protected void setViewModel(ViewModel viewModel) {
+
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
-        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        getWindow().setStatusBarColor(Color.TRANSPARENT);
-        getWindow().getDecorView().setSystemUiVisibility(View.GONE);
         Window window = getWindow();
         window.requestFeature(Window.FEATURE_ACTIVITY_TRANSITIONS);
         setExitSharedElementCallback(new MaterialContainerTransformSharedElementCallback());
         window.setSharedElementsUseOverlay(false);
-
-        getWindow().setStatusBarColor(Color.TRANSPARENT);
         super.onCreate(savedInstanceState);
 
         initBottomNav();
@@ -134,16 +131,9 @@ public class IntroActivity extends BaseBindFragmentActivity<ActivityIntroBinding
                 });
             }
             if (Math.abs(verticalOffset) >= mBind.anchorView.getTop()) {
-//                mBind.tvTitle.setTextColor(Color.WHITE);
-//                mBind.ivTitle.setTextColor(Color.WHITE);
                 mBind.actionBarBlur.setVisibility(View.VISIBLE);
-                UiTools.setStatusBar(this, true);
             } else {
-                mBind.actionBarBlur.setVisibility(View.VISIBLE);
-//                mBind.tvTitle.setTextColor(Color.WHITE);
-//                DrawableCompat.setTint(mBind.ivTitle.getDrawable(), getResources().getColor(R.color.black));
                 mBind.actionBarBlur.setVisibility(View.GONE);
-                UiTools.setStatusBar(this, false);
             }
         });
     }
@@ -208,12 +198,15 @@ public class IntroActivity extends BaseBindFragmentActivity<ActivityIntroBinding
     private void scrollToTop(int position) {
         long now = System.currentTimeMillis();
         if((now - lastClickTime) < 1200) {
+            mBind.appBarLayout.setExpanded(true, true);
             Fragment fragment = fragmentPager.createFragment(position);
             if(fragment instanceof BaseFreshFragment) {
                 lastClickTime = 0;
                 ((BaseFreshFragment<?>) fragment).scrollTo(0);
+            }else if(fragment instanceof BaseScrollableFragment) {
+                lastClickTime = 0;
+                ((BaseScrollableFragment) fragment).scrollToTop();
             }
-            mBind.appBarLayout.setExpanded(true, true);
         }
         lastClickTime = now;
     }

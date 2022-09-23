@@ -4,10 +4,10 @@
         android:radius="5dp"/>
 
     <stroke
-        android:color="@color/textColor"
+        android:color="?attr/basic_stroke_color"
         android:width="1dp" />
 
     <solid
-        android:color="@color/dark" />
+        android:color="?attr/basic_tab_background" />
 
 </shape>

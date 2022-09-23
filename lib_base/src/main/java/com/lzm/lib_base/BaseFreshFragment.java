@@ -134,27 +134,10 @@ public abstract class BaseFreshFragment<T> extends Fragment implements
         if(getActivity() != null
                 && mRecyclerView.getLayoutManager() != null){
             FasterLinearSmoothScroller scroller =
-                    new FasterLinearSmoothScroller(getActivity(), LinearSmoothScroller.SNAP_TO_ANY);
+                    new FasterLinearSmoothScroller(getActivity(), LinearSmoothScroller.SNAP_TO_START);
             scroller.setTargetPosition(position);
-            FasterLinearSmoothScroller.setTime(15f);
-            //scroller.
+            scroller.setTime(30f);
             mRecyclerView.getLayoutManager().startSmoothScroll(scroller);
-        }
-    }
-
-    public static class TopSmoothScroller extends LinearSmoothScroller {
-        TopSmoothScroller(Context context) {
-            super(context);
-        }
-
-        @Override
-        protected int getHorizontalSnapPreference() {
-            return SNAP_TO_START;
-        }
-
-        @Override
-        protected int getVerticalSnapPreference() {
-            return SNAP_TO_START;
         }
     }
 

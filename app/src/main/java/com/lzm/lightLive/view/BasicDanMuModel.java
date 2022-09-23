@@ -16,7 +16,6 @@ public class BasicDanMuModel extends DanMuModel {
 
         // 显示的文本内容
         textSize = DimensionUtil.spToPx(context, 14);
-        textColor = Color.WHITE;
         textMarginLeft = DimensionUtil.dpToPx(context, 5);
 
         this.text = text;

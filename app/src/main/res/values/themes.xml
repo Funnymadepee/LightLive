@@ -1,8 +1,27 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
+
     <style name="Theme.LightLive" parent="Theme.AppCompat.DayNight.NoActionBar">
         <item name="basic_background">@color/light_basic_background</item>
+        <item name="basic_dm_background">@color/light_basic_dm_background</item>
+        <item name="basic_dm_text_color">@color/light_basic_dm_text_color</item>
+        <item name="basic_dm_nickname_color">@color/light_basic_dm_nickname_color</item>
+        <item name="basic_tab_background">@color/light_basic_tab_background</item>
+        <item name="basic_tab_text">@color/light_basic_tab_text</item>
+        <item name="basic_tab_text_selected">@color/light_basic_tab_text_selected</item>
+        <item name="basic_tab_indicator_color">@color/light_basic_tab_indicator_color</item>
+        <item name="basic_stroke_color">#C0C0C0</item>
+        <item name="basic_title_color">@color/light_basic_title_color</item>
+        <item name="basic_nav_icon_tint_color">@color/light_basic_nav_icon_tint_color</item>
+        <item name="basic_nav_text_color">@color/light_basic_nav_text_color</item>
+        <item name="basic_blur_overlay_color">@color/light_basic_blur_overlay_color</item>
         <item name="basic_item_background">@color/light_basic_item_background</item>
         <item name="basic_text_color">@color/light_basic_text_color</item>
+        <item name="basic_host_bar_background">@color/light_basic_host_bar_background</item>
+
+        <item name="basic_ripple_state_pressed">@color/light_basic_ripple_state_pressed</item>
+        <item name="basic_ripple_state_focused">@color/light_basic_ripple_state_focused</item>
+        <item name="basic_ripple_state_activated">@color/light_basic_ripple_state_activated</item>
+        <item name="basic_ripple_state_selected">@color/light_basic_ripple_state_selected</item>
     </style>
 </resources>

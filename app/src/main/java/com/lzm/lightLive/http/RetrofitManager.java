@@ -48,7 +48,7 @@ public class RetrofitManager {
     }
 
     private static class RetrofitInstance {
-        private static final Retrofit dyRetrofit = buildRetrofit(BASE_URL_DY, new DyConverter());
+        private static final Retrofit dyRetrofit = buildRetrofit(BASE_URL_DY);
         private static final Retrofit dyOpenRetrofit = buildRetrofit(BASE_URL_DY_OPEN);
         private static final Retrofit dyStreamRetrofit = buildRetrofit(BASE_URL_DY_STREAM);
 

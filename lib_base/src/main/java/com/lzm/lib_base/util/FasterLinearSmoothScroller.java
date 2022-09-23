@@ -9,8 +9,8 @@ import androidx.recyclerview.widget.LinearSmoothScroller;
 public class FasterLinearSmoothScroller extends LinearSmoothScroller {
 
     private int scrollType;
-    private static float time;
-    public static final float DEFAULT_MILLISECONDS_PER_INCH = 25f;
+    public static final float DEFAULT_MILLISECONDS_PER_INCH = 80f;
+    private float time = DEFAULT_MILLISECONDS_PER_INCH;
 
     @IntDef({SNAP_TO_ANY, SNAP_TO_START, SNAP_TO_END})
     public @interface ScrollType {
@@ -26,8 +26,8 @@ public class FasterLinearSmoothScroller extends LinearSmoothScroller {
         return time / displayMetrics.densityDpi;
     }
 
-    public static void setTime(float milliseconds) {
-        time = milliseconds;
+    public void setTime(float milliseconds) {
+        this.time = milliseconds;
     }
 
     @Override

@@ -1,21 +1,26 @@
-package com.lzm.lightLive.util;
+package com.lzm.lightLive.http.danmu.dy;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.util.Log;
+
+import com.lzm.lightLive.App;
+import com.lzm.lightLive.R;
 import com.lzm.lightLive.http.danmu.basic.DanMu;
 import com.lzm.lightLive.http.danmu.basic.DanMuMessageType;
 import com.lzm.lightLive.http.danmu.basic.DanMuUserInfo;
 import com.lzm.lightLive.http.request.hy.DanMuFormat;
+import com.lzm.lightLive.util.ResourceUtil;
 
 public class DanMuParserDY {
 
-    public static DanMu parse(String message) {
+    public static DanMu parse(Context context, String message) {
         if(!message.contains("type@=")) return null;
         String type = message.substring(message.indexOf("type@="), message.indexOf("/rid@="))
                 .replaceAll("type@=", "");
         switch (type) {
             case "chatmsg":
-                return parseChatMsg(message);
+                return parseChatMsg(context, message);
 //            case "dgb":
 //                return parseDgb(message);
             default:
@@ -67,7 +72,7 @@ public class DanMuParserDY {
     //    /hc@=5a604a8e5b9357c9c2ebd8a128eff4f4
     //    /ifs@=1/el@=/lk@=/fl@=9/dms@=5/pdg@=35/pdk@=84
 
-    private static DanMu parseChatMsg(String msg) {
+    private static DanMu parseChatMsg(Context context, String msg) {
         String message = subString(msg, "type@=", "/ext@=");
         try {
             String uid = subString(message, "/uid@=", "/nn@=");
@@ -78,7 +83,7 @@ public class DanMuParserDY {
             String badge = subString(message, "/bnn@=", "/bl@=");
             String badgeLevel = subString(message,  "/bl@=", "/brid@=");
             int rg = subInteger(message, "/rg@=", "/cst@=");
-            int col = generateDouYuColor(subInteger(message, "/col@=", rg == 0 ? "/cst@=" : "/rg@="));
+            int col = generateDouYuColor(context, subInteger(message, "/col@=", rg == 0 ? "/cst@=" : "/rg@="));
 
             DanMuUserInfo userInfo = new DanMuUserInfo(level, uid, badge, avatar, nickName, badgeLevel);
             DanMuFormat danMuFormat = new DanMuFormat();
@@ -108,7 +113,7 @@ public class DanMuParserDY {
         return Integer.parseInt(subString(message, form, to));
     }
 
-    private static int generateDouYuColor(int col) {
+    private static int generateDouYuColor(Context context, int col) {
         switch (col) {
             case 1:
                 return Color.RED;
@@ -123,7 +128,7 @@ public class DanMuParserDY {
             case 6:
                 return Color.parseColor("#ff69b4");
             default:
-                return Color.LTGRAY;
+                return ResourceUtil.attrColor(context, R.attr.basic_dm_text_color);
         }
     }
 

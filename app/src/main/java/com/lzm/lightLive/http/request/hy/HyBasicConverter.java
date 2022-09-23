@@ -31,7 +31,7 @@ public class HyBasicConverter extends CustomGsonConvertFactory.ResponseConverter
                     && roomInfo.getHyStream().getFlv() != null
                     && roomInfo.getHyStream().getFlv().getMultiLine().get(0) != null) {
                 String url = roomInfo.getHyStream().getFlv().getMultiLine().get(0).getUrl();
-                roomInfo.setLiveStreamUri(url);
+                roomInfo.setLiveStreamUriHigh(url);
             }
 
             String nick = roomInfo.getHyProfileInfo().getNick();

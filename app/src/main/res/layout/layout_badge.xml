@@ -14,7 +14,7 @@
         android:paddingStart="10dp"
         android:paddingEnd="5dp"
         android:layout_marginStart="12dp"
-        android:background="@drawable/shape_douyu_badge"
+        android:background="@drawable/shape_dy_badge"
         android:textColor="@color/white"
         android:textSize="10sp"
         tools:ignore="SmallSp" />
@@ -23,7 +23,7 @@
         android:id="@+id/tv_badge_level"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        android:background="@drawable/shape_douyu_badge_level"
+        android:background="@drawable/shape_dy_badge_level"
         android:gravity="center"
         android:textColor="#FFFFFF"
         android:textSize="10sp"

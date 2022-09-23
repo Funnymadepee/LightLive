@@ -14,7 +14,7 @@
         android:id="@+id/ll_ui"
         android:layout_width="match_parent"
         android:layout_height="45dp"
-        android:background="@color/main_theme">
+        android:background="?attr/basic_host_bar_background">
 
         <LinearLayout
             android:layout_width="wrap_content"

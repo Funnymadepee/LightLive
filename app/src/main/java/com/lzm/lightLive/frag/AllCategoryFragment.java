@@ -2,59 +2,60 @@ package com.lzm.lightLive.frag;
 
 import android.os.Bundle;
 import android.util.Pair;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.viewpager2.widget.ViewPager2;
-
-import com.google.android.material.tabs.TabLayout;
-import com.google.android.material.tabs.TabLayoutMediator;
+import com.lzm.lib_base.BaseScrollableFragment;
 import com.lzm.lightLive.R;
-import com.lzm.lightLive.adapter.FragmentAdapter;
 import com.lzm.lightLive.http.bean.Room;
+import com.lzm.lightLive.util.ResourceUtil;
+import com.lzm.lightLive.util.UiTools;
 
-public class AllCategoryFragment extends Fragment {
+import java.util.ArrayList;
+import java.util.List;
 
-    private TabLayout tabLayout;
-    private ViewPager2 viewPager;
-    private FragmentAdapter mFragmentAdapter;
-
-    String[] tabs = new String[] {
-            "斗鱼", "虎牙", "BiliBili"
-    };
-
-    protected int getLayoutId() {
-        return R.layout.fragment_subscribe_viewpager;
-    }
+public class AllCategoryFragment extends BaseScrollableFragment {
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(getLayoutId(), null);
+    protected String[] getTabsName() {
+        return new String[] {
+                getString(R.string.DouYu),
+                getString(R.string.HuYa),
+                getString(R.string.BiliBili)
+        };
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        initView(view);
+        setTabBackgroundColor(ResourceUtil.attrColor(view.getContext(), R.attr.basic_tab_background));
+        setTabTextColors(
+                ResourceUtil.attrColor(view.getContext(), R.attr.basic_tab_text),
+                ResourceUtil.attrColor(view.getContext(), R.attr.basic_tab_text_selected)
+        );
+        setSelectedTabIndicatorColor(
+                ResourceUtil.attrColor(view.getContext(), R.attr.basic_tab_indicator_color)
+        );
+        setTabRippleColor(UiTools.getRippleColorStateList());
     }
 
-    private void initView(View view) {
-        Pair<Integer, Fragment> dyCate = new Pair<>(0, new CategoryFragment(Room.LIVE_PLAT_DY));
-        Pair<Integer, Fragment> hyCate = new Pair<>(1, new CategoryFragment(Room.LIVE_PLAT_HY));
-        Pair<Integer, Fragment> blCate = new Pair<>(2, new CategoryFragment(Room.LIVE_PLAT_BL));
+    @Override
+    protected List<Pair<Integer, CategoryFragment>> initFragments() {
+        Pair<Integer, CategoryFragment> dyCate = new Pair<>(0, generateFragment(Room.LIVE_PLAT_DY));
+        Pair<Integer, CategoryFragment> hyCate = new Pair<>(1, generateFragment(Room.LIVE_PLAT_HY));
+        Pair<Integer, CategoryFragment> blCate = new Pair<>(2, generateFragment(Room.LIVE_PLAT_BL));
 
-        mFragmentAdapter = new FragmentAdapter(this, dyCate, hyCate, blCate);
-        viewPager = view.findViewById(R.id.viewpager);
-        tabLayout = view.findViewById(R.id.tab);
-        viewPager.setAdapter(mFragmentAdapter);
-        TabLayoutMediator mediator = new TabLayoutMediator(tabLayout, viewPager,
-                true, true,
-                (tab, position) -> tab.setText(tabs[position]));
-        mediator.attach();
-
+        List<Pair<Integer, CategoryFragment>> fragments = new ArrayList<>();
+        fragments.add(dyCate);
+        fragments.add(hyCate);
+        fragments.add(blCate);
+        return fragments;
     }
 
+    private CategoryFragment generateFragment(int platform) {
+        Bundle bundle = new Bundle();
+        bundle.putInt("platform", platform);
+        CategoryFragment fragment = new CategoryFragment();
+        fragment.setArguments(bundle);
+        return fragment;
+    }
 }

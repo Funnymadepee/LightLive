@@ -6,24 +6,24 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.FrameLayout;
-import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
-
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.ui.StyledPlayerView;
 import com.google.android.material.transition.platform.MaterialContainerTransform;
 import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback;
+import com.kongzue.dialogx.dialogs.MessageDialog;
+import com.kongzue.dialogx.dialogs.TipDialog;
+import com.kongzue.dialogx.dialogs.WaitDialog;
 import com.lzm.lib_base.BaseBindingActivity;
-import com.lzm.lib_base.NotifyDialog;
+import com.lzm.lib_danmu.DanMuView;
 import com.lzm.lightLive.R;
 import com.lzm.lightLive.adapter.DanMuAdapter;
 import com.lzm.lightLive.http.bean.Room;
@@ -34,12 +34,15 @@ import com.lzm.lightLive.http.danmu.dy.DyDanMuConnector;
 import com.lzm.lightLive.http.danmu.basic.WebSocketListener;
 import com.lzm.lightLive.http.danmu.hy.HyDanMuConnector;
 import com.lzm.lightLive.model.RoomViewModel;
+import com.lzm.lightLive.model.StreamViewModel;
+import com.lzm.lightLive.util.CacheUtil;
 import com.lzm.lightLive.util.CommonUtil;
 import com.lzm.lightLive.util.DialogUtil;
 import com.lzm.lightLive.util.UiTools;
-import com.lzm.lightLive.video.VideoListener;
+import com.lzm.lightLive.view.BasicDanMuModel;
 
-public class MainActivity extends BaseBindingActivity<ActivityMainBinding, RoomViewModel> implements Player.Listener {
+public class MainActivity extends BaseBindingActivity<ActivityMainBinding, RoomViewModel>
+        implements Player.Listener {
 
     private static final String TAG = "MainActivity";
 
@@ -54,8 +57,14 @@ public class MainActivity extends BaseBindingActivity<ActivityMainBinding, RoomV
     int mLastWidth;
     int mLastHeight;
     int lastOrientation;
+    private DanMuView fullScreenDanMuView;
 
     private DanMuAdapter mDanMuAdapter;
+
+    private MediaItem mediaItemHigh;
+    private MediaItem mediaItemLow;
+
+    private StreamViewModel streamViewModel;
 
     @Override
     protected int getLayoutResId() {
@@ -68,13 +77,17 @@ public class MainActivity extends BaseBindingActivity<ActivityMainBinding, RoomV
     }
 
     @Override
+    protected void setViewModel(RoomViewModel viewModel) {
+        mBind.setViewModel(viewModel);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         Window window = getWindow();
         window.requestFeature(Window.FEATURE_ACTIVITY_TRANSITIONS);
         setExitSharedElementCallback(new MaterialContainerTransformSharedElementCallback());
-
         super.onCreate(savedInstanceState);
-        UiTools.setStatusBar(this, false);
+        statusBar.setStatusBarBackground(R.drawable.shape_trans_down);
         Bundle bundle = getIntent().getBundleExtra("bundle");
         roomInfo = bundle.getParcelable("room_info");
         if(null == roomInfo)
@@ -83,20 +96,44 @@ public class MainActivity extends BaseBindingActivity<ActivityMainBinding, RoomV
         initViewModel();
         initWindow();
         initView();
-        initDanMu();
         initViewClickListener();
-        initWebSocket();
         initFullScreenDialog();
-
-        StyledPlayerView playerView = mBind.videoView;
         player = new ExoPlayer.Builder(this).build();
+        player.addListener(this);
+        mBind.videoView.setPlayer(player);
 
-        player.addListener(new VideoListener());
+        if (!TextUtils.isEmpty(roomInfo.getLiveStreamUriHigh())) {
+            mediaItemHigh = MediaItem.fromUri(roomInfo.getLiveStreamUriHigh());
+        } else {
+            streamViewModel.requestRoomStreamInfo(roomInfo.getRoomId(),
+                    new StreamViewModel.OnStreamInfoResultListener() {
+                        @Override
+                        public void onResult(String high, String low) {
+                            roomInfo.setLiveStreamUriLow(low);
+                            roomInfo.setLiveStreamUriHigh(high);
+                            mediaItemLow = MediaItem.fromUri(high);
+                        }
 
-        playerView.setPlayer(player);
+                        @Override
+                        public void onError(Throwable throwable) {
+                            TipDialog.show(R.string.no_stream_hint, WaitDialog.TYPE.ERROR);
+                        }
+                    });
+        }
+        if (!TextUtils.isEmpty(roomInfo.getLiveStreamUriLow())) {
+            mediaItemLow = MediaItem.fromUri(roomInfo.getLiveStreamUriLow());
+        }
+        setStream(mediaItemHigh);
+    }
 
-        setStream(roomInfo.getLiveStreamUri());
-        playerView.setFullscreenButtonClickListener(isFullScreen -> System.err.println("全屏： " + isFullScreen));
+    private void initViewClickListener() {
+        mBind.ivAvatar.setOnLongClickListener(v -> {
+            DialogUtil.showHostInfoDialog(roomInfo);
+            return false;
+        });
+
+        mBind.ivBack.setOnClickListener(v -> finish());
+
         mBind.videoView.setControllerVisibilityListener((StyledPlayerView.ControllerVisibilityListener) visibility -> {
             mBind.llTitleBar.setVisibility(visibility);
         });
@@ -106,23 +143,33 @@ public class MainActivity extends BaseBindingActivity<ActivityMainBinding, RoomV
                 openFullScreenDialog();
             }
         });
-        mBind.tvDan.setOnClickListener(v -> {
-            mBind.ryDm.setVisibility(mBind.ryDm.getVisibility() == View.GONE ? View.VISIBLE : View.GONE);
-        });
-    }
 
-    private void initViewClickListener() {
-        mBind.ivAvatar.setOnLongClickListener(v -> {
-            DialogUtil.showHostInfoDialog(roomInfo);
-            return false;
+        mBind.ivDan.setOnClickListener(v -> {
+            //现在是否正在显示弹幕,则接下来要关闭弹幕显示
+            boolean isNowShowingDanMu = mDanMuAdapter.isDanMuUpdate();
+            mBind.ivDan.setImageResource(isNowShowingDanMu ?
+                    R.drawable.ic_danmu_off : R.drawable.ic_danmu_on);
+            mDanMuAdapter.setDanMuUpdate(!isNowShowingDanMu);
+            UiTools.performHapticClick(mBind.ivDan);
         });
-    }
 
-    private void initDanMu() {
-        mBind.danmu.prepare();
+        mBind.ivDefinition.setOnClickListener(v -> {
+            if (null != player && null != mediaItemHigh && null != mediaItemLow) {
+                mBind.ivDefinition.setImageResource(mediaItemHigh.equals(player.getCurrentMediaItem())
+                        ? R.drawable.ic_definition_low : R.drawable.ic_definition_hd);
+                startPlay(mediaItemHigh.equals(player.getCurrentMediaItem()) ? mediaItemLow : mediaItemHigh);
+            }else {
+                UiTools.snackShort(v, R.string.no_other_definition);
+            }
+        });
+
+        mBind.loading.setOnClickListener(v -> {
+            startPlay(mediaItemHigh.equals(player.getCurrentMediaItem()) ? mediaItemHigh : mediaItemLow);
+        });
     }
 
     private void initViewModel() {
+        streamViewModel = new StreamViewModel();
         mBind.setViewModel(mViewModel);
         mViewModel.mRoom.set(roomInfo);
         mViewModel.roomId.set(roomInfo.getRoomId());
@@ -149,35 +196,45 @@ public class MainActivity extends BaseBindingActivity<ActivityMainBinding, RoomV
         getWindow().setSharedElementExitTransition(mExitTf);
     }
 
-    private void setStream(String uri) {
-        if(TextUtils.isEmpty(uri))
-            return;
+    private void setStream(MediaItem mediaItem) {
         if(player.isPlaying()) {
             player.stop();
         }
-        MediaItem mediaItem = MediaItem.fromUri(uri);
+        if(!CommonUtil.currentIsWifiConnected(this)
+                && !CacheUtil.getNoPromptCellDataDialog(this)) {
+            MessageDialog.show(R.string.using_cell_data,
+                            R.string.continue_to_watch,
+                            R.string.confirm,
+                            R.string.cancel,
+                            R.string.no_prompt)
+                    .setOkButton((dialog, v) -> {
+                        initWebSocket();
+                        startPlay(mediaItem);
+                        return false;
+                    }).setCancelButton((dialog, v) -> {
+                        finish();
+                        return false;
+                    }).setOtherButton((dialog, v) -> {
+                        CacheUtil.setNoPromptCellDataDialog(this, true);
+                        return false;
+                    });
+        }else {
+            initWebSocket();
+            startPlay(mediaItem);
+        }
+    }
+
+    private void startPlay(MediaItem mediaItem) {
+        if (null == mediaItem) {
+            TipDialog.show(R.string.no_stream_hint , WaitDialog.TYPE.WARNING);
+            return;
+        }
+        if (player.isPlaying()) {
+            player.stop();
+        }
         player.setMediaItem(mediaItem);
         player.prepare();
-        if(!CommonUtil.currentIsWifiConnected(this)) {
-            NotifyDialog dialog = new NotifyDialog(this, R.layout.layout_dialog_info, Gravity.CENTER);
-            dialog.setAutoDismiss(false);
-            dialog.setTouchMovable(false);
-            dialog.setScrollDismissAble(false);
-            dialog.setCancelable(false);
-            TextView btnNo = dialog.findById(R.id.btn_no);
-            TextView btnYes = dialog.findById(R.id.btn_yes);
-            TextView title = dialog.findById(R.id.tv_title);
-            TextView content = dialog.findById(R.id.tv_content);
-            title.setText("流量不要钱？");
-            content.setText("继续使用流量观看？？？");
-            btnYes.setOnClickListener(v->{
-                player.play();
-            });
-            btnNo.setOnClickListener(v-> dialog.dismiss());
-            dialog.show();
-        }else {
-            player.play();
-        }
+        player.play();
     }
 
     private void initWebSocket() {
@@ -186,16 +243,23 @@ public class MainActivity extends BaseBindingActivity<ActivityMainBinding, RoomV
             public void onMessage(DanMu danMu) {
                 super.onMessage(danMu);
                 runOnUiThread(() -> {
-                    mDanMuAdapter.addData(danMu);
+                    if (mDanMuAdapter.isDanMuUpdate()) {
+                        BasicDanMuModel danMuModel = new BasicDanMuModel(MainActivity.this, danMu.getContent());
+                        danMuModel.textColor = danMu.getDanMuFormatData().getFontColor();
+                        if (mExoPlayerFullscreen && null != fullScreenDanMuView) {
+                            fullScreenDanMuView.add(danMuModel);
+                        }
+                        mDanMuAdapter.addData(danMu);
+                    }
                 });
             }
         };
         switch (roomInfo.getPlatform()) {
             case Room.LIVE_PLAT_DY:
-                mDanMuConnector = new DyDanMuConnector(roomInfo, socketListener);
+                mDanMuConnector = new DyDanMuConnector(this, roomInfo, socketListener);
                 break;
             case Room.LIVE_PLAT_HY:
-                mDanMuConnector = new HyDanMuConnector(roomInfo,socketListener);
+                mDanMuConnector = new HyDanMuConnector(this, roomInfo,socketListener);
                 break;
         }
     }
@@ -231,21 +295,31 @@ public class MainActivity extends BaseBindingActivity<ActivityMainBinding, RoomV
         lastOrientation = getRequestedOrientation();
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         mFullScreenDialog.show();
+        mExoPlayerFullscreen = true;
         ((ViewGroup) mBind.videoView.getParent()).removeView(mBind.videoView);
-        mFullScreenDialog.setContentView(mBind.videoView,
-                new ViewGroup.LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.MATCH_PARENT)
-        );
+        FrameLayout fullScreenFrameLayout = new FrameLayout(mFullScreenDialog.getContext());
+        ViewGroup.LayoutParams fullScreenLayoutParams = new ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT);
+        mFullScreenDialog.setContentView(fullScreenFrameLayout, fullScreenLayoutParams);
+        fullScreenDanMuView = new DanMuView(mFullScreenDialog.getContext(), null);
+        fullScreenDanMuView.setInterceptTouchEvent(false);
+        fullScreenDanMuView.prepare();
+        fullScreenFrameLayout.removeAllViews();
+        fullScreenFrameLayout.addView(mBind.videoView, fullScreenLayoutParams);
+        fullScreenFrameLayout.addView(fullScreenDanMuView, fullScreenLayoutParams);
         mBind.videoView.setPadding(0,0,0,0);
         mBind.videoView.setFocusable(false);
-        mExoPlayerFullscreen = true;
     }
 
     private void closeFullScreenDialog() {
         ((ViewGroup) mBind.videoView.getParent()).removeView(mBind.videoView);
-        mBind.llContent.addView(mBind.videoView,0, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT));
+        fullScreenDanMuView = null;
+        mBind.llContent.addView(mBind.videoView,0,
+                new ViewGroup.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT));
+
         mFullScreenDialog.dismiss();
         setRequestedOrientation(lastOrientation);
         mExoPlayerFullscreen = false;
@@ -254,34 +328,18 @@ public class MainActivity extends BaseBindingActivity<ActivityMainBinding, RoomV
     @Override
     public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        if (getActionBar() != null) {
-            getActionBar().hide();
-        }
-        if (getActionBar() != null) {
-            getActionBar().show();
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            openFullScreenDialog();
+        }else {
+            closeFullScreenDialog();
         }
     }
 
     @Override
-    public void onBackPressed() {
+    public void finish() {
         mDanMuConnector.close();
         player.stop();
-        super.onBackPressed();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
+        super.finish();
     }
 
     @Override
@@ -295,7 +353,10 @@ public class MainActivity extends BaseBindingActivity<ActivityMainBinding, RoomV
             case Player.STATE_BUFFERING: {
                 //播放器无法立即从当前位置开始播放。这种状态通常需要加载更多数据时发生。
                 System.err.println("正在加载数据");
-                mBind.spinKit.setVisibility(View.VISIBLE);
+                mBind.loading.setVisibility(View.VISIBLE);
+                mBind.loading.postDelayed(()->{
+                    mBind.retry.setText(R.string.click_retry);
+                }, 5000);
                 break;
             }
             case Player.STATE_READY: {
@@ -303,13 +364,15 @@ public class MainActivity extends BaseBindingActivity<ActivityMainBinding, RoomV
                 //当点击暂停或者播放时都会调用此方法
                 //当跳转进度时，进度加载完成后调用此方法
                 System.err.println("播放器可以立即从当前位置开始");
-                mBind.spinKit.setVisibility(View.GONE);
+                mBind.retry.setText(R.string.blank);
+                mBind.loading.setVisibility(View.GONE);
                 break;
             }
             case Player.STATE_ENDED: {
                 //播放器完成了播放
                 System.err.println("视频结束了噢");
-                mBind.spinKit.setVisibility(View.VISIBLE);
+                mBind.retry.setText(R.string.blank);
+                mBind.loading.setVisibility(View.VISIBLE);
                 break;
             }
         }

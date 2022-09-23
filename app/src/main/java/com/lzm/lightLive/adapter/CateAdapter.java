@@ -2,6 +2,7 @@ package com.lzm.lightLive.adapter;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.Log;
 import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -36,6 +37,5 @@ public class CateAdapter extends BaseQuickAdapter<DyCate.DyCateData, BaseViewHol
                 .setText(R.id.tv_heat_num, CommonUtil.convertInt2K(item.getCateHeat()))
                 .setText(R.id.tv_cate_url, "https://www.douyu.com/" + item.getCateUrl());
     }
-
 
 }

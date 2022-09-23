@@ -5,9 +5,9 @@
         android:bottomRightRadius="2dp"/>
 
     <stroke
-        android:color="@color/textColor"
+        android:color="?attr/basic_dm_background"
         android:width="0.5dp"/>
 
-    <solid android:color="@color/white"/>
+    <solid android:color="?attr/basic_dm_text_color"/>
 
 </shape>

@@ -30,11 +30,13 @@ public class CategoryFragment extends BaseFreshFragment<DySortRoom> {
 
     private int platform = -1;
 
-    public CategoryFragment() {
-    }
-
-    public CategoryFragment(int platform) {
-        this.platform = platform;
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Bundle bundle = getArguments();
+        if (null != bundle) {
+            this.platform = bundle.getInt("platform");
+        }
     }
 
     @Override
@@ -61,29 +63,25 @@ public class CategoryFragment extends BaseFreshFragment<DySortRoom> {
 
     @Override
     protected RecyclerView.LayoutManager getLayoutManager(Context context) {
-        return new GridLayoutManager(context, 2);
+        return new GridLayoutManager(context, 3);
     }
 
     private void requestSubHostInfo(int platform) {
-//        mAdapter.getData().clear();
+        mAdapter.getData().clear();
         DyHttpRequest dyHttpRequest = RetrofitManager.getDyRetrofit().create(DyHttpRequest.class);
-
         if (platform == Room.LIVE_PLAT_DY) {
-            Log.e(TAG, "requestSubHostInfo: " + dyHttpRequest );
             dyHttpRequest.queryAllCategories()
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Observer<DyCate>() {
                         @Override
-                        public void onSubscribe(Disposable d) {
-
-                        }
+                        public void onSubscribe(Disposable d) { }
 
                         @Override
                         public void onNext(DyCate result) {
                             if(mAdapter != null
                                     && null != result.getData()) {
-                                mAdapter.addData(0, result.getData());
+                                mAdapter.addData(result.getData());
                                 setRefresh(false);
                             }
                         }
@@ -94,9 +92,7 @@ public class CategoryFragment extends BaseFreshFragment<DySortRoom> {
                         }
 
                         @Override
-                        public void onComplete() {
-
-                        }
+                        public void onComplete() { }
                     });
         }
     }

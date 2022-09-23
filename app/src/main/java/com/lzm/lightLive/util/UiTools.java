@@ -2,6 +2,7 @@ package com.lzm.lightLive.util;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
@@ -11,17 +12,41 @@ import android.text.Layout;
 import android.text.SpannableString;
 import android.text.StaticLayout;
 import android.text.TextPaint;
+import android.util.Log;
+import android.view.HapticFeedbackConstants;
 import android.view.RoundedCorner;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.WindowInsets;
 import android.widget.TextView;
 
+import androidx.annotation.StringRes;
+
+import com.google.android.material.snackbar.Snackbar;
 import com.lzm.lightLive.R;
 
 public class UiTools {
 
     private static final String TAG = "UiTools";
+
+
+    final static int[][] states = new int[][] {
+                    new int[]{android.R.attr.state_pressed},
+                    new int[]{android.R.attr.state_focused},
+                    new int[]{android.R.attr.state_activated},
+                    new int[]{android.R.attr.state_selected}
+            };
+
+    final static int[] colors = new int[] {
+            R.attr.basic_ripple_state_pressed,
+            R.attr.basic_ripple_state_focused,
+            R.attr.basic_ripple_state_activated,
+            R.attr.basic_ripple_state_selected
+            };
+
+    public static ColorStateList getRippleColorStateList() {
+        return new ColorStateList(states,colors);
+    }
 
     public static int px2dp(Context context, int px) {
         final float scale = context.getResources().getDisplayMetrics().density;
@@ -140,6 +165,9 @@ public class UiTools {
         return corners;
     }
 
+    /**
+     * @param isImmersive 是否显示浅色背景状态栏
+     * */
     public static void setStatusBar(Activity activity, boolean isImmersive) {
         if (isImmersive) {
             activity.getWindow().getDecorView().setSystemUiVisibility(0);
@@ -154,5 +182,41 @@ public class UiTools {
         int g = ( color & 0xff00 ) >> 8;
         int b = color & 0xff;
         return Color.argb(alpha, r, g, b);
+    }
+
+    public static void performHapticClick(View view) {
+        view.performHapticFeedback(
+                HapticFeedbackConstants.VIRTUAL_KEY
+                , HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+    }
+
+    public static void performHapticLongPress(View view) {
+        view.performHapticFeedback(
+                HapticFeedbackConstants.LONG_PRESS
+                , HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+    }
+
+    public static void snackShort(View view, @StringRes int stringId) {
+        Snackbar.make(view, view.getResources().getText(stringId), Snackbar.LENGTH_SHORT).show();
+    }
+
+    public static void snackShort(View view, String msg) {
+        Snackbar.make(view, msg, Snackbar.LENGTH_SHORT).show();
+    }
+
+    public static void snackLong(View view, @StringRes int stringId) {
+        Snackbar.make(view, view.getResources().getText(stringId), Snackbar.LENGTH_LONG).show();
+    }
+
+    public static void snackLong(View view, String msg) {
+        Snackbar.make(view, msg, Snackbar.LENGTH_LONG).show();
+    }
+
+    public static void snackIndefinite(View view, @StringRes int stringId) {
+        Snackbar.make(view, view.getResources().getText(stringId), Snackbar.LENGTH_INDEFINITE).show();
+    }
+
+    public static void snackIndefinite(View view, String msg) {
+        Snackbar.make(view, msg, Snackbar.LENGTH_INDEFINITE).show();
     }
 }
