@@ -12,6 +12,7 @@ import androidx.core.view.ViewCompat;
 public class BottomNavBarBehavior extends CoordinatorLayout.Behavior<View> {
 
     private ObjectAnimator outAnimator, inAnimator;
+    private boolean isNestScroll = true;
 
     public BottomNavBarBehavior(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -26,6 +27,7 @@ public class BottomNavBarBehavior extends CoordinatorLayout.Behavior<View> {
     @Override
     public void onNestedPreScroll(@NonNull CoordinatorLayout coordinatorLayout, @NonNull View child, @NonNull View target, int dx, int dy, @NonNull int[] consumed, int type) {
         super.onNestedPreScroll(coordinatorLayout, child, target, dx, dy, consumed, type);
+        if (!isNestScroll) return;
         if (dy > 0) {// 上滑隐藏
             //todo add setting
             if (outAnimator == null) {
@@ -44,5 +46,13 @@ public class BottomNavBarBehavior extends CoordinatorLayout.Behavior<View> {
                 inAnimator.start();
             }
         }
+    }
+
+    public boolean isIsNestScroll() {
+        return isNestScroll;
+    }
+
+    public void setIsNestScroll(boolean isNestScroll) {
+        this.isNestScroll = isNestScroll;
     }
 }

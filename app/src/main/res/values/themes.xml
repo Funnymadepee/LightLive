@@ -1,7 +1,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
 
-    <style name="Theme.LightLive" parent="Theme.AppCompat.DayNight.NoActionBar">
+    <style name="Theme.LightLive" parent="Theme.MaterialComponents.NoActionBar">
         <item name="basic_background">@color/light_basic_background</item>
         <item name="basic_dm_background">@color/light_basic_dm_background</item>
         <item name="basic_dm_text_color">@color/light_basic_dm_text_color</item>

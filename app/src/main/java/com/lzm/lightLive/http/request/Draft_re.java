@@ -25,6 +25,8 @@
 
 package com.lzm.lightLive.http.request;
 
+import androidx.annotation.NonNull;
+
 import org.java_websocket.WebSocketImpl;
 import org.java_websocket.drafts.Draft;
 import org.java_websocket.enums.*;
@@ -98,7 +100,7 @@ public class Draft_re extends Draft {
 	/**
 	 * Attribute for all available extension in this draft
 	 */
-	private List<IExtension> knownExtensions;
+	private final List<IExtension> knownExtensions;
 
 	/**
 	 * Attribute for the used protocol in this draft
@@ -108,7 +110,7 @@ public class Draft_re extends Draft {
 	/**
 	 * Attribute for all available protocols in this draft
 	 */
-	private List<IProtocol> knownProtocols;
+	private final List<IProtocol> knownProtocols;
 
 	/**
 	 * Attribute for the current continuous frame
@@ -135,24 +137,14 @@ public class Draft_re extends Draft {
 	 *
 	 * @since 1.4.0
 	 */
-	private int maxFrameSize;
+	private final int maxFrameSize;
 
 	/**
 	 * Constructor for the websocket protocol specified by RFC 6455 with default extensions
 	 * @since 1.3.5
 	 */
 	public Draft_re() {
-		this( Collections.<IExtension>emptyList() );
-	}
-
-	/**
-	 * Constructor for the websocket protocol specified by RFC 6455 with custom extensions
-	 *
-	 * @param inputExtension the extension which should be used for this draft
-	 * @since 1.3.5
-	 */
-	public Draft_re(IExtension inputExtension ) {
-		this( Collections.singletonList( inputExtension ) );
+		this( Collections.emptyList() );
 	}
 
 	/**
@@ -162,7 +154,7 @@ public class Draft_re extends Draft {
 	 * @since 1.3.5
 	 */
 	public Draft_re(List<IExtension> inputExtensions ) {
-		this( inputExtensions, Collections.<IProtocol>singletonList( new Protocol( "" ) ));
+		this( inputExtensions, Collections.singletonList( new Protocol( "" ) ));
 	}
 
 	/**
@@ -181,18 +173,6 @@ public class Draft_re extends Draft {
 	 * Constructor for the websocket protocol specified by RFC 6455 with custom extensions and protocols
 	 *
 	 * @param inputExtensions the extensions which should be used for this draft
-	 * @param inputMaxFrameSize the maximum allowed size of a frame (the real payload size, decoded frames can be bigger)
-	 *
-	 * @since 1.4.0
-	 */
-	public Draft_re(List<IExtension> inputExtensions , int inputMaxFrameSize) {
-		this(inputExtensions, Collections.<IProtocol>singletonList( new Protocol( "" )), inputMaxFrameSize);
-	}
-
-	/**
-	 * Constructor for the websocket protocol specified by RFC 6455 with custom extensions and protocols
-	 *
-	 * @param inputExtensions the extensions which should be used for this draft
 	 * @param inputProtocols the protocols which should be used for this draft
 	 * @param inputMaxFrameSize the maximum allowed size of a frame (the real payload size, decoded frames can be bigger)
 	 *
@@ -202,10 +182,10 @@ public class Draft_re extends Draft {
 		if (inputExtensions == null || inputProtocols == null || inputMaxFrameSize < 1) {
 			throw new IllegalArgumentException();
 		}
-		knownExtensions = new ArrayList<IExtension>( inputExtensions.size());
-		knownProtocols = new ArrayList<IProtocol>( inputProtocols.size());
+		knownExtensions = new ArrayList<>(inputExtensions.size());
+		knownProtocols = new ArrayList<>(inputProtocols.size());
 		boolean hasDefault = false;
-		byteBufferList = new ArrayList<ByteBuffer>();
+		byteBufferList = new ArrayList<>();
 		for( IExtension inputExtension : inputExtensions ) {
 			if( inputExtension.getClass().equals( DefaultExtension.class ) ) {
 				hasDefault = true;
@@ -397,11 +377,11 @@ public class Draft_re extends Draft {
 
 	@Override
 	public Draft copyInstance() {
-		ArrayList<IExtension> newExtensions = new ArrayList<IExtension>();
+		ArrayList<IExtension> newExtensions = new ArrayList<>();
 		for( IExtension iExtension : getKnownExtensions() ) {
 			newExtensions.add( iExtension.copyInstance() );
 		}
-		ArrayList<IProtocol> newProtocols = new ArrayList<IProtocol>();
+		ArrayList<IProtocol> newProtocols = new ArrayList<>();
 		for( IProtocol iProtocol : getKnownProtocols() ) {
 			newProtocols.add( iProtocol.copyInstance() );
 		}
@@ -478,7 +458,7 @@ public class Draft_re extends Draft {
 		int payloadlength = ( byte ) ( b2 & ~( byte ) 128 );
 		Opcode optcode = toOpcode( ( byte ) ( b1 & 15 ) );
 
-		if( !( payloadlength >= 0 && payloadlength <= 125 ) ) {
+		if(!(payloadlength <= 125)) {
 			TranslatedPayloadMetaData payloadData = translateSingleFramePayloadLength(buffer, optcode, payloadlength ,maxpacketsize, realpacketsize);
 			payloadlength = payloadData.getPayloadLength();
 			realpacketsize = payloadData.getRealPackageSize();
@@ -634,7 +614,7 @@ public class Draft_re extends Draft {
 	@Override
 	public List<Framedata> translateFrame( ByteBuffer buffer ) throws InvalidDataException {
 		while( true ) {
-			List<Framedata> frames = new LinkedList<Framedata>();
+			List<Framedata> frames = new LinkedList<>();
 			Framedata cur;
 			if( incompleteframe != null ) {
 				// complete an incomplete frame
@@ -693,7 +673,7 @@ public class Draft_re extends Draft {
 		} catch ( InvalidDataException e ) {
 			throw new NotSendableException( e );
 		}
-		return Collections.singletonList( ( Framedata ) curframe );
+		return Collections.singletonList(curframe);
 	}
 
 	@Override
@@ -706,7 +686,7 @@ public class Draft_re extends Draft {
 		} catch ( InvalidDataException e ) {
 			throw new NotSendableException( e );
 		}
-		return Collections.singletonList( ( Framedata ) curframe );
+		return Collections.singletonList(curframe);
 	}
 
 	@Override
@@ -995,6 +975,7 @@ public class Draft_re extends Draft {
 		return CloseHandshakeType.TWOWAY;
 	}
 
+	@NonNull
 	@Override
 	public String toString() {
 		String result = super.toString();
@@ -1022,7 +1003,7 @@ public class Draft_re extends Draft {
 	public int hashCode() {
 		int result = extension != null ? extension.hashCode() : 0;
 		result = 31 * result + (protocol != null ? protocol.hashCode() : 0);
-		result = 31 * result + (maxFrameSize ^ (maxFrameSize >>> 32));
+		result = 31 * result;
 		return result;
 	}
 
@@ -1062,9 +1043,9 @@ public class Draft_re extends Draft {
 		return totalSize;
 	}
 
-	private class TranslatedPayloadMetaData {
-		private int payloadLength;
-		private int realPackageSize;
+	private static class TranslatedPayloadMetaData {
+		private final int payloadLength;
+		private final int realPackageSize;
 
 		private int getPayloadLength() {
 			return payloadLength;

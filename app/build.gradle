@@ -1,5 +1,7 @@
 plugins {
+    id 'kotlin-kapt'
     id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
 }
 
 android {
@@ -38,9 +40,10 @@ dependencies {
     implementation project(":lib_base")
     implementation project(":lib_danmu")
     implementation project(":lib_tars")
-    implementation 'androidx.appcompat:appcompat:1.4.1'
-    implementation 'com.google.android.material:material:1.5.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+
+    implementation 'androidx.appcompat:appcompat:1.5.0'
+    implementation 'com.google.android.material:material:1.6.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 
     //OkHttp
     api "com.squareup.okhttp3:okhttp:${configs.okhttp}"
@@ -57,7 +60,7 @@ dependencies {
     api "io.reactivex.rxjava2:rxandroid:${configs.rxandroid}"
 
     //fast json
-    api "com.alibaba:fastjson:${configs.fastjson}"
+//    api "com.alibaba:fastjson:${configs.fastjson}"
 
     //web socket
     implementation "org.java-websocket:Java-WebSocket:${configs.websocket}"
@@ -70,9 +73,7 @@ dependencies {
     implementation "com.github.kongzue.DialogX:DialogX:${configs.dialogx_version}"
 
     //Lottie动画
-    implementation "com.airbnb.android:lottie:3.6.0"
-
-    implementation 'io.github.medyo:android-about-page:2.0.0'
+    implementation 'com.airbnb.android:lottie:5.2.0'
 
     implementation 'com.github.ybq:Android-SpinKit:1.4.0'
 }

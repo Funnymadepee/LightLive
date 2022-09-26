@@ -23,80 +23,17 @@
                 android:id="@+id/video_view"
                 android:fitsSystemWindows="true"
                 android:hapticFeedbackEnabled="true"
+                app:surface_type="surface_view"
                 android:background="@color/black"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:layout_height="200dp"
                 android:visibility="visible" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/ll_ui"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:layout_gravity="center_vertical"
-                android:background="?attr/basic_host_bar_background">
-
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/iv_dan"
-                    android:layout_width="40dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginEnd="20dp"
-                    android:padding="10dp"
-                    android:visibility="visible"
-                    android:src="@drawable/ic_danmu_on"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/iv_avatar"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/tv_room_owner"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="8dp"
-                    android:text="@{viewModel.mRoom.hostName}"
-                    android:textColor="@color/white"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:text="主播名称" />
-
-                <TextView
-                    android:id="@+id/tv_room_num"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@{viewModel.mRoom.roomId}"
-                    android:textColor="@color/white"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="@+id/tv_room_owner"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="@+id/tv_room_owner"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_room_owner"
-                    tools:text="123456" />
-
-                <com.lzm.lightLive.view.RoundImageView
-                    android:id="@+id/iv_avatar"
-                    imageUrl="@{viewModel.mRoom.hostAvatar}"
-                    app:corner_radius="15dp"
-                    android:layout_width="45dp"
-                    android:layout_height="45dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginEnd="16dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:src="@mipmap/ic_launcher" />
-
-                <ImageView
-                    android:id="@+id/iv_definition"
-                    android:src="@drawable/ic_definition_hd"
-                    android:layout_width="26dp"
-                    android:layout_height="26dp"
-                    android:layout_marginEnd="20dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/iv_dan"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
+            <include
+                android:id="@+id/host_bar"
+                android:background="?attr/basic_host_bar_background"
+                layout="@layout/layout_host_bar" />
 
             <FrameLayout
                 android:layout_gravity="bottom|end"
@@ -147,7 +84,7 @@
             android:id="@+id/ll_title_bar"
             android:layout_gravity="top"
             android:visibility="gone"
-            android:background="@color/tran_50"
+            android:background="@color/tran_black_50"
             android:layout_width="match_parent"
             android:layout_height="40dp">
 

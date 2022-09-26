@@ -1,47 +1,25 @@
-<?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
-
+<layout>
     <data>
-
-        <variable
-            name="viewModel"
-            type="com.lzm.lightLive.model.RoomViewModel" />
+        <variable name="viewModel" type="com.lzm.lightLive.model.RoomViewModel" />
     </data>
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/ll_ui"
         android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:background="?attr/basic_host_bar_background">
+        android:layout_height="60dp"
+        android:background="@color/light_basic_host_bar_background"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
+        <ImageView
+            android:id="@+id/iv_dan"
+            android:layout_width="40dp"
             android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="直播标题" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="热度" />
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/tv_dan"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:background="@color/white"
+            android:layout_marginEnd="20dp"
             android:padding="10dp"
-            android:text="弹"
-            android:textColor="@color/black"
-            android:visibility="gone"
+            android:visibility="visible"
+            android:src="@drawable/ic_danmu_on"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/iv_avatar"
             app:layout_constraintTop_toTopOf="parent" />
@@ -71,18 +49,28 @@
             app:layout_constraintTop_toBottomOf="@+id/tv_room_owner"
             tools:text="123456" />
 
-        <ImageView
+        <com.lzm.lightLive.view.RoundImageView
             android:id="@+id/iv_avatar"
             imageUrl="@{viewModel.mRoom.hostAvatar}"
+            app:corner_radius="15dp"
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:layout_alignParentEnd="true"
+            android:layout_marginEnd="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:src="@mipmap/ic_launcher" />
 
+        <ImageView
+            android:id="@+id/iv_definition"
+            android:src="@drawable/ic_definition_hd"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:layout_marginEnd="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/iv_dan"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    </LinearLayout>
-
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
