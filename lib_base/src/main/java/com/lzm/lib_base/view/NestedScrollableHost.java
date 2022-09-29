@@ -11,19 +11,16 @@ import android.widget.FrameLayout;
 import androidx.annotation.Nullable;
 import androidx.viewpager2.widget.ViewPager2;
 
-import java.util.HashMap;
-
 /**
  * 此类用于解决 ViewPager2  嵌套 ViewPager2 或者 RecyclerView 等相互嵌套的冲突问题，
  */
 public class NestedScrollableHost extends FrameLayout {
 
-    private int touchSlop;
-    private float initialX;
-    private float initialY;
-    private HashMap _$_findViewCache;
+    private int touchSlop = 0;
+    private float initialX = 0f;
+    private float initialY = 0f;
 
-    private final ViewPager2 getParentViewPager() {
+    private ViewPager2 getParentViewPager() {
         ViewParent var10000 = this.getParent();
         if (!(var10000 instanceof View)) {
             var10000 = null;
@@ -45,26 +42,25 @@ public class NestedScrollableHost extends FrameLayout {
         return (ViewPager2) var2;
     }
 
-    private final View getChild() {
+    private View getChild() {
         return this.getChildCount() > 0 ? this.getChildAt(0) : null;
     }
 
-    private final boolean canChildScroll(int orientation, float delta) {
-        boolean var5 = false;
+    private boolean canChildScroll(int orientation, float delta) {
         int direction = -((int) Math.signum(delta));
         View var10000;
         boolean var6 = false;
         switch (orientation) {
             case 0:
                 var10000 = this.getChild();
-                var6 = var10000 != null ? var10000.canScrollHorizontally(direction) : false;
+                var6 = var10000 != null && var10000.canScrollHorizontally(direction);
                 break;
             case 1:
                 var10000 = this.getChild();
-                var6 = var10000 != null ? var10000.canScrollVertically(direction) : false;
+                var6 = var10000 != null && var10000.canScrollVertically(direction);
                 break;
             default:
-                // throw (Throwable)(new IllegalArgumentException());
+//                 throw (Throwable)(new IllegalArgumentException());
         }
 
         return var6;
@@ -76,7 +72,7 @@ public class NestedScrollableHost extends FrameLayout {
         return super.onInterceptTouchEvent(e);
     }
 
-    private final void handleInterceptTouchEvent(MotionEvent e) {
+    private void handleInterceptTouchEvent(MotionEvent e) {
         ViewPager2 var10000 = this.getParentViewPager();
         if (var10000 != null) {
             int orientation = var10000.getOrientation();
@@ -89,18 +85,13 @@ public class NestedScrollableHost extends FrameLayout {
                     float dx = e.getX() - this.initialX;
                     float dy = e.getY() - this.initialY;
                     boolean isVpHorizontal = orientation == 0;
-                    boolean var8 = false;
                     float scaledDx = Math.abs(dx) * (isVpHorizontal ? 0.5F : 1.0F);
-                    boolean var9 = false;
                     float scaledDy = Math.abs(dy) * (isVpHorizontal ? 1.0F : 0.5F);
                     if (scaledDx > (float) this.touchSlop || scaledDy > (float) this.touchSlop) {
                         if (isVpHorizontal == scaledDy > scaledDx) {
                             this.getParent().requestDisallowInterceptTouchEvent(false);
-                        } else if (this.canChildScroll(orientation, isVpHorizontal ? dx : dy)) {
-                            this.getParent().requestDisallowInterceptTouchEvent(true);
-                        } else {
-                            this.getParent().requestDisallowInterceptTouchEvent(false);
-                        }
+                        } else
+                            this.getParent().requestDisallowInterceptTouchEvent(this.canChildScroll(orientation, isVpHorizontal ? dx : dy));
                     }
                 }
 
@@ -120,25 +111,5 @@ public class NestedScrollableHost extends FrameLayout {
         this.touchSlop = var10001.getScaledTouchSlop();
     }
 
-    public View _$_findCachedViewById(int var1) {
-        if (this._$_findViewCache == null) {
-            this._$_findViewCache = new HashMap();
-        }
-
-        View var2 = (View) this._$_findViewCache.get(var1);
-        if (var2 == null) {
-            var2 = this.findViewById(var1);
-            this._$_findViewCache.put(var1, var2);
-        }
-
-        return var2;
-    }
-
-    public void _$_clearFindViewByIdCache() {
-        if (this._$_findViewCache != null) {
-            this._$_findViewCache.clear();
-        }
-
-    }
 }
 

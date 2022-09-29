@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.*
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.chad.library.adapter.base.BaseViewHolder
 import com.lzm.lib_base.BaseFreshFragment
 import com.lzm.lightLive.R
 import com.lzm.lightLive.adapter.HostAdapter
@@ -23,7 +24,11 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 
-class HomeFragment : BaseFreshFragment<Room?>() {
+class HomeFragment : BaseFreshFragment<Room?, HostAdapter>() {
+
+    companion object {
+        private const val TAG = "HomeFragment"
+    }
 
     private var mAdapter: HostAdapter? = null
     var roomList: List<Room> = ArrayList()
@@ -32,7 +37,7 @@ class HomeFragment : BaseFreshFragment<Room?>() {
         if (pageNum > 0) {
             requestHotHost()
         } else {
-            mAdapter?.cacheList?.clear()
+            mAdapter?.cachedList?.clear()
         }
     }
 
@@ -85,7 +90,7 @@ class HomeFragment : BaseFreshFragment<Room?>() {
                             roomList.add(temp)
                         }
                         Log.e(TAG, "onNext: " + pageNum + " roomList: " + roomList.size)
-                        mAdapter!!.setMassiveData(roomList)
+                        mAdapter!!.addData(roomList)
                         setRefresh(false)
                         baseAdapter.loadMoreComplete()
                     }
@@ -105,9 +110,7 @@ class HomeFragment : BaseFreshFragment<Room?>() {
         for (pair in roomPair) {
             when (pair.platform) {
                 Room.LIVE_PLAT_DY -> {
-                    val mDyCall = RetrofitManager.dyOpenRetrofit.create(
-                        DyHttpRequest::class.java
-                    )
+                    val mDyCall = RetrofitManager.dyOpenRetrofit.create(DyHttpRequest::class.java)
                     mDyCall.queryRoomInfo(pair.roomId)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
@@ -162,15 +165,15 @@ class HomeFragment : BaseFreshFragment<Room?>() {
 
     override fun onLoadMoreRequested() {
         val size = mAdapter!!.data.size
-        val cachedSize = mAdapter!!.cacheList.size
+        val cachedSize = mAdapter!!.cachedList.size
         if (cachedSize > size) {
             if (cachedSize > size + mAdapter!!.pageMaxItem) {
                 mAdapter?.addData(
                     size,
-                    mAdapter!!.cacheList.subList(size, size + mAdapter!!.pageMaxItem)
+                    mAdapter!!.cachedList.subList(size, size + mAdapter!!.pageMaxItem)
                 )
             } else {
-                mAdapter?.addData(size, mAdapter!!.cacheList.subList(size, cachedSize))
+                mAdapter?.addData(size, mAdapter!!.cachedList.subList(size, cachedSize))
             }
             baseAdapter.loadMoreComplete()
         } else {
@@ -194,7 +197,4 @@ class HomeFragment : BaseFreshFragment<Room?>() {
         return tempList
     }
 
-    companion object {
-        private const val TAG = "HomeFragment"
-    }
 }

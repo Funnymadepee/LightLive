@@ -50,6 +50,4 @@ class DyDanMuConnector(context: Context?, room: Room?, listener: WebSocketListen
             listener!!.onMessage(parseDanMu)
         }
     }
-
-    init { start() }
 }

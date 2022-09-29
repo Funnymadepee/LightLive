@@ -19,7 +19,12 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 
-class CategoryFragment : BaseFreshFragment<DySortRoom?>() {
+class CategoryFragment : BaseFreshFragment<DySortRoom?, CateAdapter>() {
+
+    companion object {
+        private const val TAG = "CategoryFragment"
+    }
+
     private var mAdapter: CateAdapter? = null
     private var platform = -1
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -76,12 +81,9 @@ class CategoryFragment : BaseFreshFragment<DySortRoom?>() {
                         Log.e(TAG, "onError: " + e.message)
                     }
 
-                    override fun onComplete() {}
+                    override fun onComplete() { }
                 })
         }
     }
 
-    companion object {
-        private const val TAG = "CategoryFragment"
-    }
 }

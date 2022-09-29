@@ -152,7 +152,7 @@ class HyDanMuConnector(context: Context?, room: Room?, listener: WebSocketListen
             websocketCmd.write(tarsOutputStream.toByteArray(), 1)
             cmdByteArray = websocketCmd.toByteArray()
             Log.e("TAG", "cmdByteArray: " + String(cmdByteArray))
-            start()
+            listener?.onReady()
         } catch (illegalStateException: IllegalStateException) {
             Log.e(TAG, "requestHyHtml: " + illegalStateException.message)
         }

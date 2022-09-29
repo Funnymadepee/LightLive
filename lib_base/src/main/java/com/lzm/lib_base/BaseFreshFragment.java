@@ -5,31 +5,31 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.BaseViewHolder;
 import com.lzm.lib_base.util.FasterLinearSmoothScroller;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class BaseFreshFragment<T> extends Fragment implements
+public abstract class BaseFreshFragment<T, A extends BaseQuickAdapter> extends Fragment
+        implements
         SwipeRefreshLayout.OnRefreshListener,
         BaseQuickAdapter.OnItemClickListener,
         BaseQuickAdapter.RequestLoadMoreListener{
 
-    protected BaseBindingActivity baseActivity;
-
     protected int pageNum;
-
-    protected final int PAGE_SIZE = 20;
 
     protected ArrayList<T> dataList;
 
-    protected BaseQuickAdapter baseAdapter;
+    protected A baseAdapter;
 
     private SwipeRefreshLayout mSwipeLayout;
 
@@ -45,7 +45,7 @@ public abstract class BaseFreshFragment<T> extends Fragment implements
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initView(view);
     }
@@ -60,17 +60,10 @@ public abstract class BaseFreshFragment<T> extends Fragment implements
         mRecyclerView = view.findViewById(R.id.recycle);
         mSwipeLayout = view.findViewById(R.id.swipe_fresh);
         mSwipeLayout.setColorSchemeResources(
-                android.R.color.holo_blue_light,
-                android.R.color.holo_green_light,
-                android.R.color.holo_orange_light,
-                android.R.color.holo_red_light);
+                android.R.color.holo_blue_light
+        );
         mSwipeLayout.setOnRefreshListener(this);
         mRecyclerView.setLayoutManager(getLayoutManager(view.getContext()));
-
-        //添加 Item 分割线
-//        mRecyclerView.addItemDecoration(
-//                new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL));
-
     }
 
     protected RecyclerView getBaseRecyclerView() {
@@ -80,7 +73,7 @@ public abstract class BaseFreshFragment<T> extends Fragment implements
     /**
      * 设置适配器 在子类中调用
      */
-    protected void setAdapter(BaseQuickAdapter adapter) {
+    protected void setAdapter(A adapter) {
         baseAdapter = adapter;
         baseAdapter.setOnItemClickListener(this);
 
@@ -91,7 +84,7 @@ public abstract class BaseFreshFragment<T> extends Fragment implements
 
     }
 
-    protected void dealData(List<T> list, int status){
+    protected void dealData(List<T> list){
         if (pageNum == 0) {
             mSwipeLayout.setRefreshing(false);
         }
@@ -100,9 +93,9 @@ public abstract class BaseFreshFragment<T> extends Fragment implements
             dataList.addAll(list);
         }
 
-        baseAdapter.notifyDataSetChanged();
+        baseAdapter.notifyItemRangeChanged(0, dataList.size());
 
-        if (list == null || list.size() < PAGE_SIZE) {
+        if (list == null) {
             mSwipeLayout.setRefreshing(false);
             baseAdapter.loadMoreComplete();
             return;
@@ -139,10 +132,5 @@ public abstract class BaseFreshFragment<T> extends Fragment implements
             scroller.setTime(30f);
             mRecyclerView.getLayoutManager().startSmoothScroll(scroller);
         }
-    }
-
-    public final boolean isVisible(Context context) {
-        return isAdded() && !isHidden() && getView() != null
-                && getView().getVisibility() == View.VISIBLE;
     }
 }

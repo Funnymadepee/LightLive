@@ -20,7 +20,8 @@ public class AppActionBarBehavior extends CoordinatorLayout.Behavior<View> {
 
     //获取状态栏的高度
     private int getStatusBarHeight(Context context) {
-        int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
+        int resourceId = context.getResources()
+                .getIdentifier("status_bar_height", "dimen", "android");
         if (resourceId > 0) {
             return context.getResources().getDimensionPixelSize(resourceId);
         }

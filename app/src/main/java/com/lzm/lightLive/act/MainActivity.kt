@@ -1,12 +1,17 @@
 package com.lzm.lightLive.act
 
 import android.app.Dialog
+import android.app.PictureInPictureParams
 import android.content.pm.ActivityInfo
+import android.content.pm.PackageManager
 import android.content.res.Configuration
+import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
+import android.util.Rational
 import android.view.*
 import android.widget.FrameLayout
+import androidx.core.app.NotificationCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.exoplayer2.ExoPlayer
@@ -34,7 +39,6 @@ import com.lzm.lightLive.util.CacheUtil
 import com.lzm.lightLive.util.CommonUtil
 import com.lzm.lightLive.util.DialogUtil
 import com.lzm.lightLive.util.UiTools
-import com.lzm.lightLive.video.service.FloatingService
 import com.lzm.lightLive.view.BasicDanMuModel
 
 class MainActivity : BaseBindingActivity<ActivityMainBinding?, RoomViewModel?>(), Player.Listener {
@@ -51,6 +55,7 @@ class MainActivity : BaseBindingActivity<ActivityMainBinding?, RoomViewModel?>()
     private var mediaItemLow: MediaItem? = null
     private var streamViewModel: StreamViewModel? = null
     private var lastConfiguration: Configuration? = null
+
     override fun getLayoutResId(): Int {
         return R.layout.activity_main
     }
@@ -196,7 +201,7 @@ class MainActivity : BaseBindingActivity<ActivityMainBinding?, RoomViewModel?>()
         if (null == player) {
             player = ExoPlayer.Builder(this).build()
             player!!.addListener(this)
-            mBind!!.videoView.player = player
+//            mBind!!.videoView.player = player
         }
         player!!.setMediaItem(mediaItem)
         player!!.prepare()
@@ -231,6 +236,7 @@ class MainActivity : BaseBindingActivity<ActivityMainBinding?, RoomViewModel?>()
             Room.LIVE_PLAT_HY -> mDanMuConnector =
                 HyDanMuConnector(this, roomInfo, socketListener)
         }
+        mDanMuConnector?.start()
     }
 
     private fun initWindow() {
@@ -314,17 +320,6 @@ class MainActivity : BaseBindingActivity<ActivityMainBinding?, RoomViewModel?>()
         lastConfiguration = newConfig
     }
 
-    override fun onDestroy() {
-        mDanMuConnector!!.close()
-        if (CacheUtil.getFloatWhenExit(this)
-            && null != player!!.currentMediaItem
-        ) {
-            FloatingService.startFloatingService(this, roomInfo)
-        }
-        stopPlay()
-        super.onDestroy()
-    }
-
     override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
         when (playbackState) {
             Player.STATE_IDLE -> {
@@ -336,7 +331,6 @@ class MainActivity : BaseBindingActivity<ActivityMainBinding?, RoomViewModel?>()
 
                 //播放器无法立即从当前位置开始播放。这种状态通常需要加载更多数据时发生。
                 System.err.println("正在加载数据")
-                mBind!!.loading.visibility = View.VISIBLE
                 mBind!!.loading.postDelayed({ mBind!!.retry.setText(R.string.click_retry) }, 5000)
             }
             Player.STATE_READY -> {

@@ -38,4 +38,6 @@ dependencies {
     api 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.30'
     //support-v4包，用里面的下拉刷新SwipeRefreshLayout
     api 'androidx.legacy:legacy-support-v4:1.0.0'
+
+    implementation 'androidx.lifecycle:lifecycle-service:2.3.1'
 }

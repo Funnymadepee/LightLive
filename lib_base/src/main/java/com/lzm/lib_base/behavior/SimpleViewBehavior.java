@@ -4,13 +4,12 @@ import android.animation.ArgbEvaluator;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.ColorDrawable;
-import android.os.Build;
 import android.util.AttributeSet;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.Transformation;
+import androidx.annotation.NonNull;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import com.lzm.lib_base.R;
 
@@ -27,13 +26,13 @@ public class SimpleViewBehavior extends CoordinatorLayout.Behavior<View> {
 
     private static final int DEPEND_TYPE_Y = 3;
 
-    private int mDependType;
-    private int mDependViewId;
+    private final int mDependType;
+    private final int mDependViewId;
 
-    private int mDependTargetX;
-    private int mDependTargetY;
-    private int mDependTargetWidth;
-    private int mDependTargetHeight;
+    private final int mDependTargetX;
+    private final int mDependTargetY;
+    private final int mDependTargetWidth;
+    private final int mDependTargetHeight;
 
     private int mDependStartX;
     private int mDependStartY;
@@ -49,28 +48,22 @@ public class SimpleViewBehavior extends CoordinatorLayout.Behavior<View> {
     private float mStartRotateX;
     private float mStartRotateY;
 
-    private int mTargetX;
+    private final int mTargetX;
     private int mTargetY;
-    private int mTargetWidth;
-    private int mTargetHeight;
-    private int mTargetBackgroundColor;
-    private float mTargetAlpha;
-    private float mTargetRotateX;
-    private float mTargetRotateY;
+    private final int mTargetWidth;
+    private final int mTargetHeight;
+    private final int mTargetBackgroundColor;
+    private final float mTargetAlpha;
+    private final float mTargetRotateX;
+    private final float mTargetRotateY;
 
-    private int mAnimationId;
+    private final int mAnimationId;
     private Animation mAnimation;
 
     private boolean isPrepared;
 
-    private Context mContext;
-
-    private float scale;
-
     public SimpleViewBehavior(Context context, AttributeSet attrs) {
         super(context, attrs);
-        mContext = context;
-        scale = mContext.getResources().getDisplayMetrics().density;
         // setting values
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.SimpleBehavior);
         mDependViewId = a.getResourceId(R.styleable.SimpleBehavior_dependsOn, 0);
@@ -112,7 +105,7 @@ public class SimpleViewBehavior extends CoordinatorLayout.Behavior<View> {
             mAnimation.initialize(child.getWidth(), child.getHeight(), parent.getWidth(), parent.getHeight());
         }
 
-        if (Build.VERSION.SDK_INT > 16 && parent.getFitsSystemWindows() && mTargetY != UNSPECIFIED_INT) {
+        if (parent.getFitsSystemWindows() && mTargetY != UNSPECIFIED_INT) {
             int result = 0;
             int resourceId = parent.getContext().getResources().getIdentifier("status_bar_height", "dimen", "android");
             if (resourceId > 0) {
@@ -125,12 +118,15 @@ public class SimpleViewBehavior extends CoordinatorLayout.Behavior<View> {
     }
 
     @Override
-    public boolean layoutDependsOn(CoordinatorLayout parent, View child, View dependency) {
+    public boolean layoutDependsOn(@NonNull CoordinatorLayout parent
+            , @NonNull View child, View dependency) {
         return dependency.getId() == mDependViewId;
     }
 
     @Override
-    public boolean onDependentViewChanged(CoordinatorLayout parent, View child, View dependency) {
+    public boolean onDependentViewChanged(@NonNull CoordinatorLayout parent,
+                                          @NonNull  View child,
+                                          @NonNull  View dependency) {
         if (!isPrepared) {
             prepare(parent, child, dependency);
         }
@@ -139,7 +135,9 @@ public class SimpleViewBehavior extends CoordinatorLayout.Behavior<View> {
     }
 
     @Override
-    public boolean onLayoutChild(CoordinatorLayout parent, View child, int layoutDirection) {
+    public boolean onLayoutChild(@NonNull CoordinatorLayout parent,
+                                 @NonNull View child,
+                                 int layoutDirection) {
         boolean bool = super.onLayoutChild(parent, child, layoutDirection);
         if (isPrepared) {
             updateView(child, parent.getDependencies(child).get(0));
@@ -182,32 +180,19 @@ public class SimpleViewBehavior extends CoordinatorLayout.Behavior<View> {
     }
 
 
-
-
     public void updateViewWithPercent(View child, float percent) {
         if (mAnimation == null) {
-            ViewGroup.LayoutParams childParams = child.getLayoutParams();
             float newX = mTargetX == UNSPECIFIED_INT ? 0 : (mTargetX - mStartX) * percent;
             float newY = mTargetY == UNSPECIFIED_INT ? 0 : (mTargetY - mStartY) * percent;
 
             if (mTargetWidth != UNSPECIFIED_INT) {
-                //int newWidth = (int) (mStartWidth + (mTargetWidth - mStartWidth)*percent);
                 float tempX = mStartWidth + ((mTargetWidth - mStartWidth) * percent);
-                //childParams.width = newWidth;
-                //child.setLayoutParams(childParams);
-
                 child.setScaleX(tempX / mStartWidth);
-
                 newX -= (mStartWidth - tempX) / 2;
             }
             if(mTargetHeight != UNSPECIFIED_INT){
-                //int newHeight = (int) (mStartHeight + (mTargetHeight - mStartHeight)*percent);
                 float tempY = mStartHeight + ((mTargetHeight - mStartHeight) * percent);
-                //childParams.height = newHeight;
-                //child.setLayoutParams(childParams);
-
                 child.setScaleY(tempY / mStartHeight);
-
                 newY -= (mStartHeight - tempY) / 2;
             }
 
@@ -242,15 +227,9 @@ public class SimpleViewBehavior extends CoordinatorLayout.Behavior<View> {
         child.requestLayout();
     }
 
-    protected int dp2px(float dp) {
-        return (int) (dp * scale + 0.5f);
-    }
-
-
-
     private static class BehaviorAnimation extends Animation {
 
-        private Transformation mTransformation;
+        private final Transformation mTransformation;
 
         public BehaviorAnimation(Transformation transformation) {
             mTransformation = transformation;

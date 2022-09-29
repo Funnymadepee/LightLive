@@ -19,7 +19,7 @@ abstract class DanMuServiceConnector(
 ) {
     private val executorService: ExecutorService = Executors.newCachedThreadPool()
     private var webSocketClient: WebSocketClient? = null
-    protected fun start() {
+    fun start() {
         executorService.submit {
             webSocketClient = create()
             webSocketClient!!.connect()

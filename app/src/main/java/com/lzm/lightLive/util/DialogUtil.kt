@@ -105,7 +105,6 @@ object DialogUtil {
                         override fun onSubscribe(d: Disposable) {}
                         override fun onNext(result: BaseResult<DySortRoom?>) {
                             if (null != result.data) {
-                                val roomList = ArrayList<Room?>()
                                 for (room in result.data?.relatedList!!) {
                                     val temp =
                                         Room(room.roomId.toString(), Room.LIVE_PLAT_DY)
@@ -127,9 +126,8 @@ object DialogUtil {
                                     if (!TextUtils.isEmpty(room.thumb)) {
                                         temp.thumbUrl = room.thumb
                                     }
-                                    roomList.add(temp)
+                                    mAdapter.addData(temp)
                                 }
-                                mAdapter.setMassiveData(roomList)
                             }
                         }
 

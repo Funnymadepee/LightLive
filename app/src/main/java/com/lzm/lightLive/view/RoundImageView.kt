@@ -39,10 +39,7 @@ class RoundImageView @JvmOverloads constructor(
         var scale = 1.0f
         if (!(bitmap.width == width && bitmap.height == height)) {
             // 如果图片的宽或者高与view的宽高不匹配，计算出需要缩放的比例；缩放后的图片的宽高，一定要大于我们view的宽高；所以我们这里取大值；
-            scale = Math.max(
-                width * 1.0f / bitmap.width,
-                height * 1.0f / bitmap.height
-            )
+            scale = (width * 1.0f / bitmap.width).coerceAtLeast(height * 1.0f / bitmap.height)
         }
         // shader的变换矩阵，我们这里主要用于放大或者缩小
         mMatrix.setScale(scale, scale)

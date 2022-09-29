@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
+import com.lzm.lib_base.adapter.BaseAdapter
 import com.lzm.lib_base.util.FasterLinearSmoothScroller
 import com.lzm.lightLive.R
 import com.lzm.lightLive.http.danmu.basic.DanMu
@@ -18,7 +19,12 @@ import com.lzm.lightLive.util.AnimUtil
 import com.lzm.lightLive.util.ResourceUtil
 
 class DanMuAdapter(private val mRecyclerView: RecyclerView, layoutResId: Int, footerView: View) :
-    BaseQuickAdapter<DanMu, BaseViewHolder>(layoutResId), ScrollEvent {
+    BaseAdapter<DanMu>(layoutResId), ScrollEvent {
+
+    companion object {
+//        private const val TAG = "DanMuAdapter"
+    }
+    
     val scrollListener: OnScrollListener = OnScrollListener(this)
     private val footerView: View
     var isDanMuUpdate = true
@@ -140,10 +146,6 @@ class DanMuAdapter(private val mRecyclerView: RecyclerView, layoutResId: Int, fo
 
     private val isFooterViewShow: Boolean
         get() = footerView.visibility == View.VISIBLE
-
-    companion object {
-//        private const val TAG = "DanMuAdapter"
-    }
 
     init {
         this.footerView = footerView

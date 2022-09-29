@@ -26,21 +26,16 @@
         <service android:name=".video.service.FloatingService" />
 
         <activity
-            android:name=".act.TestActivity"
-            android:exported="true">
-
-        </activity>
-        <activity
             android:name=".act.IntroActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".act.MainActivity"
+            android:resizeableActivity="true"
             android:configChanges="orientation|screenSize|uiMode"
             android:exported="true" />
     </application>

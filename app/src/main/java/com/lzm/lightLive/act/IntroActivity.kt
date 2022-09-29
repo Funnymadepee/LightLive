@@ -4,7 +4,12 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
+import android.content.ComponentName
+import android.content.Context
+import android.content.Intent
+import android.content.ServiceConnection
 import android.os.Bundle
+import android.os.IBinder
 import android.text.Editable
 import android.util.*
 import android.view.*
@@ -13,8 +18,12 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.airbnb.lottie.LottieDrawable
 import com.google.android.material.appbar.AppBarLayout
@@ -32,16 +41,39 @@ import com.lzm.lightLive.frag.AllCategoryFragment
 import com.lzm.lightLive.frag.AllSubscribedFragment
 import com.lzm.lightLive.frag.HomeFragment
 import com.lzm.lightLive.frag.SettingFragment
+import com.lzm.lightLive.http.BaseResult
+import com.lzm.lightLive.http.RetrofitManager
+import com.lzm.lightLive.http.bean.bl.BLRoom
+import com.lzm.lightLive.http.request.bl.BlHttpRequest
 import com.lzm.lightLive.model.RoomViewModel
 import com.lzm.lightLive.util.CacheUtil
 import com.lzm.lightLive.util.SimpleTextWatcher
 import com.lzm.lightLive.util.UiTools
+import com.lzm.lightLive.video.service.FloatingService
+import com.lzm.lightLive.view.YouTuDraggingView
+import io.reactivex.Observer
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import kotlin.math.abs
 
 class IntroActivity : BaseBindFragmentActivity<ActivityIntroBinding?, ViewModel?>(), NavigationBarView.OnItemSelectedListener {
 
     companion object {
         private const val TAG = "IntroActivity"
+
+        var mPlayerBinder: FloatingService.PlayerBinder? = null
+
+        private val mConnection: ServiceConnection = object : ServiceConnection {
+            override fun onServiceConnected(name: ComponentName?, service: IBinder) {
+                Log.e(TAG, "onServiceConnected: $name $service" )
+                mPlayerBinder = service as FloatingService.PlayerBinder
+            }
+
+            override fun onServiceDisconnected(name: ComponentName?) {
+                mPlayerBinder = null
+            }
+        }
     }
 
     private val itemHome: MenuItem? = null
@@ -52,6 +84,7 @@ class IntroActivity : BaseBindFragmentActivity<ActivityIntroBinding?, ViewModel?
     private var fragmentPager: FragmentAdapter? = null
     private var appBarSlideOffset = -1
     private var percent = 0f
+
     override fun getLayoutResId(): Int {
         return R.layout.activity_intro
     }
@@ -73,9 +106,49 @@ class IntroActivity : BaseBindFragmentActivity<ActivityIntroBinding?, ViewModel?
         initBottomNav()
         initFragment()
         initCustomSetting()
+        test()
         mBind?.appBarLayout?.alpha = 1f
         mBind?.appBarLayout?.post { initAppBarListener() }
         showFragment(0)
+
+        val intent = Intent(this, FloatingService::class.java)
+        bindService(intent, mConnection, Context.BIND_AUTO_CREATE)
+    }
+
+    private fun test() {
+        val mBlRequest = RetrofitManager.blRetrofit.create(
+            BlHttpRequest::class.java
+        )
+        mBlRequest.getRoomInfo("5194110")
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(object : Observer<BaseResult<BLRoom?>> {
+                override fun onSubscribe(d: Disposable) {}
+                override fun onNext(result: BaseResult<BLRoom?>) {
+                    Log.e(TAG, "getRoomInfo: ${result.data}" )
+
+                    mBlRequest.getUidInfo(arrayOf(result.data?.uid))
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(object : Observer<BaseResult<BLRoom?>> {
+                            override fun onSubscribe(d: Disposable) {}
+                            override fun onNext(result: BaseResult<BLRoom?>) {
+                                Log.e(TAG, "onNext: ${result.data}" )
+                            }
+                            override fun onError(e: Throwable) {
+                                Log.e(TAG, "onError: $e" )
+                            }
+                            override fun onComplete() { }
+                        })
+                }
+
+                override fun onError(e: Throwable) {
+                    Log.e(TAG, "getRoomInfo: " + e.message)
+                }
+
+                override fun onComplete() {}
+            })
+
     }
 
     private fun initView() {
@@ -99,7 +172,26 @@ class IntroActivity : BaseBindFragmentActivity<ActivityIntroBinding?, ViewModel?
         }
     }
 
+    fun ViewPager2.bindFragment(
+        fm: FragmentManager,
+        lifecycle: Lifecycle,
+        fragments: List<Fragment>
+    ): ViewPager2 {
+        offscreenPageLimit = fragments.size - 1
+
+        adapter = object : FragmentStateAdapter(fm, lifecycle) {
+            override fun getItemCount(): Int = fragments.size
+            override fun createFragment(position: Int): Fragment = fragments[position]
+        }
+        return this
+    }
+
     private fun initFragment() {
+        mBind?.content?.bindFragment(
+            supportFragmentManager,
+            this.lifecycle,
+            listOf(HomeFragment(), AllCategoryFragment(), AllSubscribedFragment(), SettingFragment()),
+        )
         val home = Pair<Int, Fragment>(0, HomeFragment())
         val cate = Pair<Int, Fragment>(1, AllCategoryFragment())
         val sub = Pair<Int, Fragment>(2, AllSubscribedFragment())
@@ -111,7 +203,7 @@ class IntroActivity : BaseBindFragmentActivity<ActivityIntroBinding?, ViewModel?
             set
         )
         mBind?.content?.offscreenPageLimit = 2
-        mBind?.content?.isUserInputEnabled = true
+//        mBind?.content?.isUserInputEnabled = true
         mBind?.content?.adapter = fragmentPager
         mBind?.content?.registerOnPageChangeCallback(object : OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
@@ -164,7 +256,7 @@ class IntroActivity : BaseBindFragmentActivity<ActivityIntroBinding?, ViewModel?
             }
             if (abs(verticalOffset) >= mBind?.anchorView!!.top) { //滑动到顶了
                 mBind?.actionBarBlur?.alpha = 1f
-            } else {                                             //滑动中 percent = 收缩比例
+            } else {                                              //滑动中 percent = 收缩比例
                 mBind?.actionBarBlur?.alpha = percent
             }
         }
@@ -234,7 +326,7 @@ class IntroActivity : BaseBindFragmentActivity<ActivityIntroBinding?, ViewModel?
         if (now - lastClickTime < 1200) {
             mBind?.appBarLayout?.setExpanded(true, true)
             val fragment = fragmentPager!!.createFragment(position)
-            if (fragment is BaseFreshFragment<*>) {
+            if (fragment is BaseFreshFragment<*, *>) {
                 lastClickTime = 0
                 fragment.scrollTo(0)
             } else if (fragment is BaseScrollableFragment<*>) {
@@ -310,4 +402,8 @@ class IntroActivity : BaseBindFragmentActivity<ActivityIntroBinding?, ViewModel?
         }
     }
 
+    override fun onDestroy() {
+        unbindService(mConnection)
+        super.onDestroy()
+    }
 }

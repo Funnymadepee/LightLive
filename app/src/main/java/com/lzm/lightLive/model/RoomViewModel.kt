@@ -22,12 +22,8 @@ class RoomViewModel : ViewModel() {
     val roomId = ObservableField<String?>()
     val avatar = ObservableField<String?>()
     val roomStatus = ObservableBoolean(false)
-    var mDyCall: DyHttpRequest = RetrofitManager.dyOpenRetrofit.create(
-        DyHttpRequest::class.java
-    )
-    var mHyCall: HyHttpRequest = RetrofitManager.hyMpRetrofit.create(
-        HyHttpRequest::class.java
-    )
+    var mDyCall: DyHttpRequest = RetrofitManager.dyOpenRetrofit.create(DyHttpRequest::class.java)
+    var mHyCall: HyHttpRequest = RetrofitManager.hyMpRetrofit.create(HyHttpRequest::class.java)
 
     fun requestRoomInfo(room: Room): MutableLiveData<Room?> {
         val roomMutableLiveData = MutableLiveData<Room?>()

@@ -1,6 +1,5 @@
 package com.lzm.lightLive.frag
 
-import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
@@ -16,6 +15,10 @@ import com.lzm.lightLive.util.PermissionUtil
 import com.lzm.lightLive.util.UiTools
 
 class SettingFragment : BaseBindingFragment<FragmentSettingBinding?>() {
+
+    companion object {
+        private const val TAG = "SettingFragment"
+    }
 
     override fun setLayout(): Int {
         return R.layout.fragment_setting
@@ -58,7 +61,4 @@ class SettingFragment : BaseBindingFragment<FragmentSettingBinding?>() {
             }
     }
 
-    companion object {
-        private const val TAG = "SettingFragment"
-    }
 }

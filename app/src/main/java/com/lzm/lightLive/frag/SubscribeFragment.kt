@@ -22,7 +22,12 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 
-class SubscribeFragment : BaseFreshFragment<Room?>() {
+class SubscribeFragment : BaseFreshFragment<Room?, HostAdapter>() {
+
+    companion object {
+        private const val TAG = "SubscribeFragment"
+    }
+
     private var mAdapter: HostAdapter? = null
     private var showStatus = -1
     var roomList: List<Room>? = null
@@ -133,7 +138,4 @@ class SubscribeFragment : BaseFreshFragment<Room?>() {
         }
     }
 
-    companion object {
-        private const val TAG = "SubscribeFragment"
-    }
 }

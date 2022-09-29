@@ -7,20 +7,26 @@ import androidx.databinding.ViewDataBinding;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModel;
 import com.lzm.lib_base.status.StatusBarHost;
+import com.lzm.lib_base.status.StatusBarHostLayout;
 
-public abstract class BaseBindFragmentActivity<VB extends ViewDataBinding, VM extends ViewModel> extends FragmentActivity {
+public abstract class BaseBindFragmentActivity<VB extends ViewDataBinding
+        , VM extends ViewModel> extends FragmentActivity {
 
-    protected VB mBind;
-    protected VM mViewModel;
+    public VB mBind;
+    public VM mViewModel;
 
-    protected abstract @LayoutRes int getLayoutResId();
-    protected abstract VM getViewModel();
-    protected abstract void setViewModel(VM viewModel);
+    public abstract @LayoutRes int getLayoutResId();
+    public abstract VM getViewModel();
+    public abstract void setViewModel(VM viewModel);
+
+    public StatusBarHostLayout statusBarHostLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        StatusBarHost.inject(this).setStatusBarImmersive(true).setStatusBarBlackText();
+        statusBarHostLayout = StatusBarHost.inject(this);
+        statusBarHostLayout.setStatusBarImmersive(true);
+        statusBarHostLayout.setStatusBarBlackText();
         mBind = DataBindingUtil.setContentView(this, getLayoutResId());
         mViewModel = getViewModel();
         setViewModel(mViewModel);

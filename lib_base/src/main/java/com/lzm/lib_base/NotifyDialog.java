@@ -35,6 +35,7 @@ public class NotifyDialog extends Dialog implements View.OnTouchListener{
     private static ValueAnimator dismissAnimator;
 
 
+
     public NotifyDialog(Context context, @LayoutRes int resId, int gravity) {
         super(context);
         mView = View.inflate(context, resId, null);

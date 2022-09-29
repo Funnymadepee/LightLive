@@ -6,7 +6,7 @@ import android.view.View;
 
 public class StatusBarView extends View {
 
-    private int mBarSize;
+    private final int mBarSize;
 
     public StatusBarView(Context context) {
         this(context, null, 0);

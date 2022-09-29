@@ -1,19 +1,18 @@
 package com.lzm.lightLive.adapter
 
 import android.content.Context
-import android.content.Intent
-import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.ImageView
 import androidx.core.app.ActivityCompat
 import com.bumptech.glide.Glide
-import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.kongzue.dialogx.dialogs.TipDialog
 import com.kongzue.dialogx.dialogs.WaitDialog
+import com.lzm.lib_base.adapter.BaseAdapter
+import com.lzm.lightLive.App
 import com.lzm.lightLive.R
-import com.lzm.lightLive.act.MainActivity
+import com.lzm.lightLive.act.IntroActivity
 import com.lzm.lightLive.http.BaseResult
 import com.lzm.lightLive.http.RetrofitManager
 import com.lzm.lightLive.http.bean.Room
@@ -26,27 +25,14 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 
-class HostAdapter : BaseQuickAdapter<Room, BaseViewHolder> {
+class HostAdapter : BaseAdapter<Room> {
 
     companion object {
         private const val TAG = "HostAdapter"
     }
 
-    var pageMaxItem = 10
-    val cacheList: MutableList<Room?> = ArrayList()
-
     constructor(layoutResId: Int, data: List<Room>?) : super(layoutResId, data)
     constructor(layoutResId: Int) : super(layoutResId)
-
-    fun setMassiveData(collection: Collection<Room?>) {
-        if (collection.size > pageMaxItem) {
-            val cachedSize = cacheList.size
-            cacheList.addAll(cachedSize, collection)
-            addData(cacheList.subList(cachedSize, cachedSize + pageMaxItem))
-        } else {
-            addData(collection)
-        }
-    }
 
     override fun convert(helper: BaseViewHolder, item: Room) {
         val context = helper.itemView.context
@@ -108,6 +94,7 @@ class HostAdapter : BaseQuickAdapter<Room, BaseViewHolder> {
                         room.liveStreamUriLow = low
                         WaitDialog.dismiss()
                         startPlay(context, room)
+//                        startPlay(room)
                     }
 
                     override fun onError(e: Throwable) {
@@ -124,11 +111,23 @@ class HostAdapter : BaseQuickAdapter<Room, BaseViewHolder> {
 
     private fun startPlay(context: Context, room: Room) {
         if (room.streamStatus == Room.LIVE_STATUS_ON) {
-            val intent = Intent(context, MainActivity::class.java)
+            Log.e(TAG, "startPlay: $IntroActivity.mPlayerBinder" )
+            if (null != IntroActivity.mPlayerBinder && IntroActivity.mPlayerBinder?.isBinderAlive!!) {
+                IntroActivity.mPlayerBinder!!.startPlay(room)
+            }
+            /*val intent = Intent(context, MainActivity::class.java)
             val bundle = Bundle()
             bundle.putParcelable("room_info", room)
             intent.putExtra("bundle", bundle)
-            context.startActivity(intent)
+            context.startActivity(intent)*/
+
+            /*val introActivity = App.appStateWatcher.callbacks.topActivity as IntroActivity
+            introActivity.runOnUiThread {
+                introActivity.mBind?.videoView?.show()
+            }*/
+//            introActivity.mBind?.videoView.start()
+//            mYouTuDraggingView.show()
+//            mVideoView.setUp("https://github.com/moyokoo/Media/blob/master/Azshara.mp4?raw=true")
         } else {
             TipDialog.show(R.string.no_stream_hint, WaitDialog.TYPE.WARNING, 1500)
         }

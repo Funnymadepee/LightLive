@@ -4,14 +4,14 @@ import android.text.TextUtils
 import android.view.View
 import android.widget.ImageView
 import com.bumptech.glide.Glide
-import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
+import com.lzm.lib_base.adapter.BaseAdapter
 import com.lzm.lightLive.R
 import com.lzm.lightLive.http.bean.dy.DyCate.DyCateData
 import com.lzm.lightLive.util.CommonUtil
 import com.lzm.lightLive.util.DialogUtil
 
-class CateAdapter(layoutResId: Int) : BaseQuickAdapter<DyCateData, BaseViewHolder>(layoutResId) {
+class CateAdapter(layoutResId: Int) : BaseAdapter<DyCateData>(layoutResId) {
     override fun convert(helper: BaseViewHolder, item: DyCateData) {
         val context = helper.itemView.context
         helper.itemView.setOnClickListener { DialogUtil.showCateInfoDialog(item) }

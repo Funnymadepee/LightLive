@@ -9,7 +9,7 @@ class HyConverter : ResponseConverter() {
     @Throws(IOException::class)
     public override fun convertResponse(value: ResponseBody): String {
         val valueStr = value.string()
-        Log.e("convertResponse: ", valueStr)
+        Log.e("jsonConverter: ", valueStr)
         return valueStr
     }
 }

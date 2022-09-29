@@ -1,6 +1,5 @@
 package com.lzm.lightLive.http.request.hy
 
-import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.google.gson.reflect.TypeToken
@@ -16,7 +15,6 @@ class HyBasicConverter : ResponseConverter() {
     override fun convertResponse(value: ResponseBody): String {
         var response = value.string()
         val obj = Gson().fromJson(response, JsonObject::class.java)
-        Log.e("convertResponse: ", obj.toString())
         if (obj.has("data") && obj["data"] != null) {
             val roomInfo = Gson().fromJson(obj["data"], HyRoom::class.java)
             val roomName = roomInfo.hyLiveData?.roomName

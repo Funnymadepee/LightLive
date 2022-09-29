@@ -1,7 +1,6 @@
 package com.lzm.lib_danmu.view;
 
 import com.lzm.lib_danmu.model.DanMuModel;
-
 import java.util.List;
 
 public interface IDanMuParent {

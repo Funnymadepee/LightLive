@@ -26,7 +26,7 @@ public class StatusBarHostUtils {
     /**
      * 设置沉浸式状态
      *
-     * @param activity
+     * @param activity 宿主activity
      */
     public static void immersiveStatusBar(Activity activity) {
         Window window = activity.getWindow();
@@ -44,7 +44,7 @@ public class StatusBarHostUtils {
     /**
      * 6.0版本及以上可以设置黑色的状态栏文本
      *
-     * @param activity
+     * @param activity 宿主activity
      * @param darkFont 是否需要黑色文本
      * @return 是否修改成功
      */
@@ -63,7 +63,7 @@ public class StatusBarHostUtils {
     /**
      * 获取状态栏高度
      *
-     * @param context
+     * @param context 宿主activity
      * @return 高度
      */
     public static int getStatusBarHeight(Context context) {

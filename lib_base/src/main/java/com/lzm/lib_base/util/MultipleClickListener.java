@@ -2,7 +2,7 @@ package com.lzm.lib_base.util;
 
 import android.view.View;
 
-public class DoubleClickListener implements View.OnClickListener{
+public class MultipleClickListener implements View.OnClickListener{
 
     private final int clickCount;
     private final long duration;
@@ -13,7 +13,7 @@ public class DoubleClickListener implements View.OnClickListener{
      * @param duration 间隔时间
      * @param clickEvent 回调事件
      * */
-    public DoubleClickListener(int clickCount, long duration, ClickEvent clickEvent) {
+    public MultipleClickListener(int clickCount, long duration, ClickEvent clickEvent) {
         this.clickCount = clickCount;
         this.duration = duration;
         this.clickEvent = clickEvent;

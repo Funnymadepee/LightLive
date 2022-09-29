@@ -9,5 +9,6 @@ abstract class WebSocketListener {
     fun onMessage(byteBuffer: ByteBuffer?) {}
     open fun onMessage(danMu: DanMu) {}
     fun onOpen(handshake: ServerHandshake?) {}
+    fun onReady() {}
     fun onClose(code: Int, reason: String?, remote: Boolean) {}
 }

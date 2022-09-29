@@ -20,7 +20,9 @@ public class BottomNavBarBehavior extends CoordinatorLayout.Behavior<View> {
 
     // 垂直滑动
     @Override
-    public boolean onStartNestedScroll(CoordinatorLayout coordinatorLayout, View child, View directTargetChild, View target, int nestedScrollAxes) {
+    public boolean onStartNestedScroll(@NonNull CoordinatorLayout coordinatorLayout,
+                                       @NonNull View child, @NonNull View directTargetChild,
+                                       @NonNull View target, int nestedScrollAxes) {
         return nestedScrollAxes == ViewCompat.SCROLL_AXIS_VERTICAL;
     }
 
