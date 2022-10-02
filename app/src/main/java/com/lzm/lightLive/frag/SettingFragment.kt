@@ -47,6 +47,9 @@ class SettingFragment : BaseBindingFragment<FragmentSettingBinding?>() {
                 }
             }
         }
+        mBind?.tvNav?.setOnClickListener {
+
+        }
     }
 
     private val registerActivity =

@@ -5,18 +5,26 @@
     <data>
 
     </data>
+
     <androidx.core.widget.NestedScrollView
         android:id="@+id/root_nestScroll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <androidx.appcompat.widget.AppCompatCheckBox
                 android:id="@+id/tv_float"
                 android:text="返回桌面后小窗播放"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <androidx.appcompat.widget.AppCompatCheckBox
+                android:id="@+id/tv_nav"
+                android:text="导航栏跟随滑动隐藏"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 

@@ -10,6 +10,7 @@ import com.lzm.lightLive.util.ResourceUtil
 import com.lzm.lightLive.util.UiTools
 
 class AllCategoryFragment : BaseScrollableFragment<CategoryFragment?>() {
+
     override fun getTabsName(): Array<String> {
         return arrayOf(
             getString(R.string.DouYu),

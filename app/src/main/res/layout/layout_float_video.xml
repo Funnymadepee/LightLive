@@ -8,7 +8,7 @@
         <variable name="viewModel" type="com.lzm.lightLive.model.RoomViewModel" />
     </data>
 
-    <com.lzm.lib_base.view.SessionConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/root"
         android:clickable="true"
         android:layout_width="match_parent"
@@ -70,6 +70,6 @@
             android:layout_width="50dp"
             android:layout_height="50dp"/>
 
-    </com.lzm.lib_base.view.SessionConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

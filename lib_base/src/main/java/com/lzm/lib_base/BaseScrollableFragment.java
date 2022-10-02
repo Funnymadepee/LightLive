@@ -49,8 +49,8 @@ public abstract class BaseScrollableFragment<BF extends BaseFreshFragment > exte
     }
 
     public void scrollToTop() {
-        int currentItem = viewPager.getCurrentItem();
         try {
+            int currentItem = viewPager.getCurrentItem();
             BaseFreshFragment fragment = (BaseFreshFragment) getChildFragmentManager().findFragmentById(currentItem);
             fragment.scrollTo(0);
         }catch (NullPointerException | ClassCastException e) {

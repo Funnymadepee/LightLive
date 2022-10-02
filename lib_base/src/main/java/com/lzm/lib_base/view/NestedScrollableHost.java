@@ -16,30 +16,30 @@ import androidx.viewpager2.widget.ViewPager2;
  */
 public class NestedScrollableHost extends FrameLayout {
 
-    private int touchSlop = 0;
+    private int touchSlop;
     private float initialX = 0f;
     private float initialY = 0f;
 
     private ViewPager2 getParentViewPager() {
-        ViewParent var10000 = this.getParent();
-        if (!(var10000 instanceof View)) {
-            var10000 = null;
+        ViewParent viewParent = this.getParent();
+        if (!(viewParent instanceof View)) {
+            viewParent = null;
         }
 
         View v;
-        for (v = (View) var10000; v != null && !(v instanceof ViewPager2); v = (View) var10000) {
-            var10000 = v.getParent();
-            if (!(var10000 instanceof View)) {
-                var10000 = null;
+        for (v = (View) viewParent; v != null && !(v instanceof ViewPager2); v = (View) viewParent) {
+            viewParent = v.getParent();
+            if (!(viewParent instanceof View)) {
+                viewParent = null;
             }
         }
 
-        View var2 = v;
+        View viewPager = v;
         if (!(v instanceof ViewPager2)) {
-            var2 = null;
+            viewPager = null;
         }
 
-        return (ViewPager2) var2;
+        return (ViewPager2) viewPager;
     }
 
     private View getChild() {
@@ -48,22 +48,21 @@ public class NestedScrollableHost extends FrameLayout {
 
     private boolean canChildScroll(int orientation, float delta) {
         int direction = -((int) Math.signum(delta));
-        View var10000;
-        boolean var6 = false;
+        View viewChild;
+        boolean canChildScroll = false;
         switch (orientation) {
             case 0:
-                var10000 = this.getChild();
-                var6 = var10000 != null && var10000.canScrollHorizontally(direction);
+                viewChild = this.getChild();
+                canChildScroll = viewChild != null && viewChild.canScrollHorizontally(direction);
                 break;
             case 1:
-                var10000 = this.getChild();
-                var6 = var10000 != null && var10000.canScrollVertically(direction);
+                viewChild = this.getChild();
+                canChildScroll = viewChild != null && viewChild.canScrollVertically(direction);
                 break;
             default:
 //                 throw (Throwable)(new IllegalArgumentException());
         }
-
-        return var6;
+        return canChildScroll;
     }
 
     @Override
@@ -73,26 +72,34 @@ public class NestedScrollableHost extends FrameLayout {
     }
 
     private void handleInterceptTouchEvent(MotionEvent e) {
-        ViewPager2 var10000 = this.getParentViewPager();
-        if (var10000 != null) {
-            int orientation = var10000.getOrientation();
-            if (this.canChildScroll(orientation, -1.0F) || this.canChildScroll(orientation, 1.0F)) {
-                if (e.getAction() == 0) {
-                    this.initialX = e.getX();
-                    this.initialY = e.getY();
-                    this.getParent().requestDisallowInterceptTouchEvent(true);
-                } else if (e.getAction() == 2) {
-                    float dx = e.getX() - this.initialX;
-                    float dy = e.getY() - this.initialY;
-                    boolean isVpHorizontal = orientation == 0;
-                    float scaledDx = Math.abs(dx) * (isVpHorizontal ? 0.5F : 1.0F);
-                    float scaledDy = Math.abs(dy) * (isVpHorizontal ? 1.0F : 0.5F);
-                    if (scaledDx > (float) this.touchSlop || scaledDy > (float) this.touchSlop) {
-                        if (isVpHorizontal == scaledDy > scaledDx) {
-                            this.getParent().requestDisallowInterceptTouchEvent(false);
-                        } else
-                            this.getParent().requestDisallowInterceptTouchEvent(this.canChildScroll(orientation, isVpHorizontal ? dx : dy));
-                    }
+        ViewPager2 parentViewPager = this.getParentViewPager();
+        if (parentViewPager != null) {
+            int orientation = parentViewPager.getOrientation();
+            if (this.canChildScroll(orientation, -1.0F)
+                    || this.canChildScroll(orientation, 1.0F)) {
+                switch (e.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        this.initialX = e.getX();
+                        this.initialY = e.getY();
+                        this.getParent().requestDisallowInterceptTouchEvent(true);
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        float dx = e.getX() - this.initialX;
+                        float dy = e.getY() - this.initialY;
+                        boolean isVpHorizontal = orientation == 0;
+                        float scaledDx = Math.abs(dx) * (isVpHorizontal ? 0.5F : 1.0F);
+                        float scaledDy = Math.abs(dy) * (isVpHorizontal ? 1.0F : 0.5F);
+                        if (scaledDx > (float) this.touchSlop || scaledDy > (float) this.touchSlop) {
+                            if (isVpHorizontal == scaledDy > scaledDx) {
+                                this.getParent().requestDisallowInterceptTouchEvent(false);
+                            } else {
+                                this.getParent().requestDisallowInterceptTouchEvent(
+                                        this.canChildScroll(orientation, isVpHorizontal ? dx : dy)
+                                );
+
+                            }
+                        }
+                        break;
                 }
 
             }
@@ -101,14 +108,14 @@ public class NestedScrollableHost extends FrameLayout {
 
     public NestedScrollableHost(Context context) {
         super(context);
-        ViewConfiguration var10001 = ViewConfiguration.get(this.getContext());
-        this.touchSlop = var10001.getScaledTouchSlop();
+        ViewConfiguration viewConfiguration = ViewConfiguration.get(this.getContext());
+        this.touchSlop = viewConfiguration.getScaledTouchSlop();
     }
 
     public NestedScrollableHost(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        ViewConfiguration var10001 = ViewConfiguration.get(this.getContext());
-        this.touchSlop = var10001.getScaledTouchSlop();
+        ViewConfiguration viewConfiguration = ViewConfiguration.get(this.getContext());
+        this.touchSlop = viewConfiguration.getScaledTouchSlop();
     }
 
 }

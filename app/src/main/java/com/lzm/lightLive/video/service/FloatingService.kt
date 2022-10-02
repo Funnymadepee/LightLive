@@ -9,6 +9,7 @@ import android.view.View
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
 import com.lzm.lib_base.BaseBindingOverlayService
+import com.lzm.lib_base.view.DispatchKeyEventListener
 import com.lzm.lib_base.view.SessionConstraintLayout
 import com.lzm.lightLive.App
 import com.lzm.lightLive.R
@@ -29,7 +30,7 @@ class FloatingService : BaseBindingOverlayService<FloatingService.PlayerBinder, 
 
     private var player: ExoPlayer? = null
 
-    private var mDispatchKeyEventListener = SessionConstraintLayout.DispatchKeyEventListener {
+    private var mDispatchKeyEventListener = DispatchKeyEventListener {
         if (it.keyCode == KeyEvent.KEYCODE_BACK) {
             if (App.appStateWatcher.callbacks.topActivity is IntroActivity) {
                 Log.e(TAG, "back event" )
@@ -58,7 +59,7 @@ class FloatingService : BaseBindingOverlayService<FloatingService.PlayerBinder, 
     private fun iniView() {
         mBind?.root?.visibility = View.GONE
         mBind!!.hostBar.ivDan.visibility = View.GONE
-        mBind?.root?.dispatchKeyEventListener = mDispatchKeyEventListener
+//        mBind?.root?.dispatchKeyEventListener = mDispatchKeyEventListener
         mBind?.close?.setOnClickListener { stopPlay() }
     }
 

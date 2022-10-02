@@ -10,6 +10,7 @@ import com.lzm.lightLive.util.ResourceUtil
 import com.lzm.lightLive.util.UiTools
 
 class AllSubscribedFragment : BaseScrollableFragment<SubscribeFragment?>() {
+
     override fun getTabsName(): Array<String> {
         return arrayOf(
             getString(R.string.live_status_on),

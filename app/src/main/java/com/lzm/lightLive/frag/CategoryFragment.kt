@@ -27,6 +27,7 @@ class CategoryFragment : BaseFreshFragment<DySortRoom?, CateAdapter>() {
 
     private var mAdapter: CateAdapter? = null
     private var platform = -1
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val bundle = arguments

@@ -18,6 +18,7 @@
         <ImageView
             android:id="@+id/iv_thumb"
             tools:layout_height="160dp"
+            android:src="@drawable/ic_live_no"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 

@@ -113,7 +113,7 @@ class DanMuAdapter(private val mRecyclerView: RecyclerView, layoutResId: Int, fo
         showFooterView(View.VISIBLE)
     }
 
-    class OnScrollListener(private val scrollEvent: ScrollEvent?) :
+    open class OnScrollListener(private val scrollEvent: ScrollEvent?) :
         RecyclerView.OnScrollListener() {
         override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
             super.onScrollStateChanged(recyclerView, newState)

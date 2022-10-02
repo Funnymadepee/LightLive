@@ -4,6 +4,7 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
+import android.annotation.SuppressLint
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
@@ -111,8 +112,8 @@ class IntroActivity : BaseBindFragmentActivity<ActivityIntroBinding?, ViewModel?
         mBind?.appBarLayout?.post { initAppBarListener() }
         showFragment(0)
 
-        val intent = Intent(this, FloatingService::class.java)
-        bindService(intent, mConnection, Context.BIND_AUTO_CREATE)
+//        val intent = Intent(this, FloatingService::class.java)
+//        bindService(intent, mConnection, Context.BIND_AUTO_CREATE)
     }
 
     private fun test() {
@@ -151,6 +152,7 @@ class IntroActivity : BaseBindFragmentActivity<ActivityIntroBinding?, ViewModel?
 
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private fun initView() {
         mBind?.searchRv?.layoutManager = GridLayoutManager(this, 2)
     }

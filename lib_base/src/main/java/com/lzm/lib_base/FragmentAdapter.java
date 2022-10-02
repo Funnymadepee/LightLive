@@ -2,17 +2,35 @@ package com.lzm.lib_base;
 
 import android.util.Pair;
 import android.util.SparseArray;
+import android.view.MotionEvent;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
+import androidx.viewpager2.adapter.FragmentViewHolder;
 
+import com.lzm.lib_base.view.DispatchKeyEventListener;
+
+import java.util.EventListener;
 import java.util.List;
 
 public class FragmentAdapter<BF extends BaseFreshFragment> extends FragmentStateAdapter {
 
     private final SparseArray<Fragment> fragments = new SparseArray<>();
+
+
+    @Override
+    public void onBindViewHolder(@NonNull FragmentViewHolder holder, int position, @NonNull List<Object> payloads) {
+        super.onBindViewHolder(holder, position, payloads);
+        holder.itemView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return false;
+            }
+        });
+    }
 
     public FragmentAdapter(@NonNull Fragment fragment, List<Pair<Integer, BF>> args) {
         super(fragment);

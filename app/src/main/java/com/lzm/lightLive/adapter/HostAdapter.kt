@@ -7,12 +7,16 @@ import android.widget.ImageView
 import androidx.core.app.ActivityCompat
 import com.bumptech.glide.Glide
 import com.chad.library.adapter.base.BaseViewHolder
+import com.google.android.exoplayer2.ExoPlayer
+import com.google.android.exoplayer2.MediaItem
 import com.kongzue.dialogx.dialogs.TipDialog
 import com.kongzue.dialogx.dialogs.WaitDialog
+import com.lzm.lib_base.NotifyDialog
 import com.lzm.lib_base.adapter.BaseAdapter
 import com.lzm.lightLive.App
 import com.lzm.lightLive.R
 import com.lzm.lightLive.act.IntroActivity
+import com.lzm.lightLive.databinding.LayoutFloatVideoBinding
 import com.lzm.lightLive.http.BaseResult
 import com.lzm.lightLive.http.RetrofitManager
 import com.lzm.lightLive.http.bean.Room
@@ -32,6 +36,7 @@ class HostAdapter : BaseAdapter<Room> {
     }
 
     constructor(layoutResId: Int, data: List<Room>?) : super(layoutResId, data)
+
     constructor(layoutResId: Int) : super(layoutResId)
 
     override fun convert(helper: BaseViewHolder, item: Room) {
@@ -112,19 +117,53 @@ class HostAdapter : BaseAdapter<Room> {
     private fun startPlay(context: Context, room: Room) {
         if (room.streamStatus == Room.LIVE_STATUS_ON) {
             Log.e(TAG, "startPlay: $IntroActivity.mPlayerBinder" )
-            if (null != IntroActivity.mPlayerBinder && IntroActivity.mPlayerBinder?.isBinderAlive!!) {
+            /*if (null != IntroActivity.mPlayerBinder && IntroActivity.mPlayerBinder?.isBinderAlive!!) {
                 IntroActivity.mPlayerBinder!!.startPlay(room)
-            }
+            }*/
             /*val intent = Intent(context, MainActivity::class.java)
             val bundle = Bundle()
             bundle.putParcelable("room_info", room)
             intent.putExtra("bundle", bundle)
             context.startActivity(intent)*/
 
-            /*val introActivity = App.appStateWatcher.callbacks.topActivity as IntroActivity
-            introActivity.runOnUiThread {
-                introActivity.mBind?.videoView?.show()
+            val introActivity = App.appStateWatcher.callbacks.topActivity as IntroActivity
+            /*introActivity.runOnUiThread {
+                introActivity.mBind?.player?.visibility = View.VISIBLE
+                val player = ExoPlayer.Builder(introActivity).build()
+                introActivity.mBind?.video?.player = player
+                room.liveStreamUriHigh?.let { MediaItem.fromUri(it) }
+                    ?.let { player.setMediaItem(it) }
+                player.prepare()
+                player.play()
             }*/
+            val dialog = NotifyDialog<LayoutFloatVideoBinding>(introActivity, R.layout.layout_float_video, Gravity.CENTER)
+            dialog.setAutoDismiss(false)
+            dialog.setTouchMovable(true)
+            dialog.show()
+            dialog.setScrollDismissAble(false)
+
+            val player = ExoPlayer.Builder(introActivity).build()
+            dialog.mBind.video.player = player
+            room.liveStreamUriHigh?.let { MediaItem.fromUri(it) }
+                ?.let { player.setMediaItem(it) }
+            player.prepare()
+            player.play()
+
+            dialog.setOnKeyListener { _, keyCode, _->
+                if (keyCode == KeyEvent.KEYCODE_BACK) {
+                    player.stop()
+                    player.release()
+                    dialog.dismiss()
+                    return@setOnKeyListener true
+                }
+                false
+            }
+            dialog.mBind.close.setOnClickListener {
+                player.stop()
+                player.release()
+                dialog.dismiss()
+            }
+
 //            introActivity.mBind?.videoView.start()
 //            mYouTuDraggingView.show()
 //            mVideoView.setUp("https://github.com/moyokoo/Media/blob/master/Azshara.mp4?raw=true")

@@ -40,9 +40,4 @@ public class SessionConstraintLayout extends ConstraintLayout {
         this.mDispatchKeyEventListener = mDispatchKeyEventListener;
     }
 
-    //监听接口
-    public static interface DispatchKeyEventListener {
-        boolean dispatchKeyEvent(KeyEvent event);
-    }
-
 }

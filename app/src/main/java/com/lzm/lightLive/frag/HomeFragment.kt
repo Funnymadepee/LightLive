@@ -33,6 +33,7 @@ class HomeFragment : BaseFreshFragment<Room?, HostAdapter>() {
     private var mAdapter: HostAdapter? = null
     var roomList: List<Room> = ArrayList()
     var cacheList: List<Room> = ArrayList()
+
     override fun getData() {
         if (pageNum > 0) {
             requestHotHost()
